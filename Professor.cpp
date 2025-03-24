@@ -1,0 +1,100 @@
+#include "Professor.h"
+#include "Cours.h"
+
+Professor::Professor(string uname, string pwd, string name, string family, int id) : User(uname, pwd)
+{
+    Firstname = name;
+    Lastname = family;
+}
+
+string Professor::get_firstname()
+{
+    return Firstname;
+}
+
+string Professor::get_lastname()
+{
+    return Lastname;
+}
+
+int Student::get_id()
+{
+    return Id;
+}
+
+Professor *Professor::get_nextP()
+{
+    return next_P;
+}
+
+void Professor::set_nextP(Professor *nextP)
+{
+    next_P = nextP;
+}
+
+void Professor::Sign_in(Professor *&headProfessor)
+{
+    string username, password;
+    cout << YELLOW << "Pleas enter your username:" << RESET << endl;
+    cin >> username;
+    cout << YELLOW << "Pleas enter your password:" << RESET << endl;
+    cin >> password;
+
+    Professor *temp = headProfessor;
+    while (temp != nullptr)
+    {
+        if (temp->get_username() == username && temp->get_password() == password)
+        {
+            cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
+            // اینجا باید ببینیم که آیا فرد دانشجو هست یا استاد که بتونه وارد بخش کاربری خودش بره
+            return;
+        }
+        temp = temp->get_nextP();
+    }
+    cerr << RED << "Username or password is incorrect" << RESET << endl;
+    return;
+}
+
+void Professor::Sign_up_P(Professor *&headProfessor)
+{
+    string username, password1, password2, firstname, lastname;
+    int id;
+    cout << YELLOW << "Pleas enter your firstname:" << RESET << endl;
+    cin >> firstname;
+    cout << YELLOW << "Pleas enter your lastname:" << RESET << endl;
+    cin >> lastname;
+    cout << YELLOW << "Pleas enter your username:" << RESET << endl;
+    cin >> username;
+    Professor*temp=headProfessor;
+    while (temp!=nullptr)
+    {
+        while (temp->get_username()==username)
+        {
+            cerr<<RED<<"This username already exists. Please enter a new username:"<<RESET<<endl;
+            cin >> username;
+        }
+        temp=temp->get_nextP();
+    }    
+    cout << YELLOW << "Pleas enter your password:" << RESET << endl;
+    cin >> password1;
+    cout << YELLOW << "Please repeat your password again:" << RESET << endl;
+    cin >> password2;
+    while (password1!=password2)
+    {
+        cerr<<RED<<"The entered password does not match. Please try again and enter passsword:"<<RESET<<endl;
+        cin >> password2;
+    }
+    cout << YELLOW << "Pleas enter your Id:" << RESET << endl;
+    cin >> id;
+
+    Professor*newprofessor=new Professor(username,password1,firstname,lastname,id);
+    Add_professor(headProfessor,newprofessor);
+    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+}
+
+void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor)
+{
+    newprofessor->set_nextP(headProfessor);
+    headProfessor=newprofessor;
+}
+
