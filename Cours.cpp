@@ -13,6 +13,40 @@ Cours::Cours(string name, string college, int units, int capacity, float score, 
     professor = prof;
 }
 
+string Cours::get_Coursename()
+{
+    return Coursename;
+}
+
+string Cours::get_College()
+{
+    return College;
+}
+string Cours::get_day()
+{
+    return Day;
+}
+string Cours::get_time()
+{
+    return Time;
+}
+int Cours::get_units()
+{
+    return Units;
+}
+int Cours::get_capacity()
+{
+    return Capacity;
+}
+float Cours::get_score()
+{
+    return Score;
+}
+float Cours::get_average_Scores()
+{
+    return Average_Scores;
+}
+
 void Cours::Addstudent(Student *newstudent)
 {
     students->set_nextS(newstudent);
@@ -40,11 +74,6 @@ Task *Cours::get_Tasks()
     return tasks;
 }
 
-string Cours::get_Coursename()
-{
-    return Coursename;
-}
-
 Cours *Cours::get_next_cours()
 {
     return nextcours;
@@ -52,5 +81,5 @@ Cours *Cours::get_next_cours()
 
 void Cours::set_next_cours(Cours *newcours)
 {
-    nextcours=newcours;
+    nextcours = newcours;
 }

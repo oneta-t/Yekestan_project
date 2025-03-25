@@ -21,12 +21,19 @@ private:
     Cours *nextcours;
 public:
     Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
+    string get_Coursename();
+    string get_College();
+    string get_day();
+    string get_time();
+    int get_units();
+    int get_capacity();
+    float get_score();
+    float get_average_Scores();
     void Addstudent(Student*newstudent);
     void Addtask(Task*newtaske);
     Professor *get_Professor();
     Student *get_Students();
     Task *get_Tasks();
-    string get_Coursename();
     Cours* get_next_cours();
     void set_next_cours(Cours* newcours);
 };
