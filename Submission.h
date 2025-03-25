@@ -7,18 +7,19 @@
 class Submission
 {
 private:
-    //string student_name;
+    string student_name;
     int Id;
     string Answer;
     float Score;
     //Submission *Next_sub;
 
 public:
-    Submission(int id,string answer,float score);
-    //string get_student_name();
+    Submission(int id,string name,string answer,float score);
+    string get_student_name();
     int get_id();
     string get_answer();
     float get_score();
+    void set_score(float scour);
     // Submission* get_next_sub();
     // void Submission::set_next_sub(Submission*next_submission);
 };

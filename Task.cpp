@@ -1,11 +1,17 @@
 #include "Task.h"
 
-Task::Task(string description, string deadline)
+Task::Task(string name,string description, string deadline)
 {
+    Name=name;
     Deadline = deadline;
     Description = description;
     submission=nullptr;
     next_t = nullptr;
+}
+
+string Task::get_nametask()
+{
+    return Name;
 }
 
 string Task::get_description()

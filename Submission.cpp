@@ -1,8 +1,8 @@
 #include "Submission.h"
 
-Submission::Submission(int id,string answer,float score)
+Submission::Submission(int id,string name,string answer,float score)
 {
-    //student_name=name;
+    student_name=name;
     Id=id;
     Answer=answer;
     Score=score;
@@ -14,10 +14,10 @@ int Submission::get_id()
     return Id;
 }
 
-// string Submission::get_student_name()
-// {
-//     return student_name;
-// }
+string Submission::get_student_name()
+{
+    return student_name;
+}
 
 string Submission::get_answer()
 {
@@ -27,6 +27,10 @@ string Submission::get_answer()
 float Submission::get_score()
 {
     return Score;
+}
+void Submission::set_score(float scour)
+{
+    Score=scour;
 }
 
 // Submission* Submission::get_next_sub()

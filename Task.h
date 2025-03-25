@@ -8,13 +8,15 @@
 class Task
 {
 private:
+    string Name;
     string Description;
     string Deadline;
     Submission *submission;
     Task * next_t;
 
 public:
-    Task(string description,string deadline);
+    Task(string name,string description,string deadline);
+    string get_nametask();
     string get_description();
     string get_deadline();
     Task* get_next_task();
