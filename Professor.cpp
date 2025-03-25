@@ -115,23 +115,59 @@ void Professor::display_students(Cours *cours)
         return;
     }
     Student *students = cours->get_Students();
-    cout << "\033[1;32m" << "List of students:" << endl;
+    cout << "\033[1;32m" << "List of students:" << RESET << endl;
     while (students != nullptr)
     {
-        cout << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
+        cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
         students = students->get_nextS();
     }
 }
 
-void Professor::create_task(Cours *cours, string description, string deadline)
+void Professor::create_task(Cours *cours, string nametaske, string description, string deadline)
 {
     if (cours->get_Professor() != this)
     {
         cerr << RED << "This cours does not belong to you" << RESET << endl;
         return;
     }
-    Task *newtasks = new Task(description, deadline);
+    Task *newtasks = new Task(nametaske, description, deadline);
     cours->Addtask(newtasks);
 }
 
-
+void Professor::score_task(Cours *cours, int id, float score)
+{
+    Task *current = cours->get_Tasks();
+    cout << "\033[1;32m" << "List of tasks:" << RESET << endl;
+    while (current != nullptr)
+    {
+        cout << GREEN << current->get_nametask() << "\t" << current->get_deadline() << endl
+             << current->get_description() << RESET << endl;
+        current = current->get_next_task();
+        cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
+    }
+    cout << "Pleas enter name of task you want to grad:" << endl;
+    string nametask;
+    cin >> nametask;
+    current = cours->get_Tasks();
+    while (current != nullptr)
+    {
+        if (current->get_nametask() == nametask)
+        {
+            Submission *temp = current->get_Submissions();
+            if (temp == nullptr)
+            {
+                cout << RED << "No submissions found for this task" << RESET << endl;
+                return;
+            }
+            cout << BLUE << temp->get_student_name() << "\t" << "Studeny ID:" << temp->get_id() << endl
+                 << "Answer: " << temp->get_answer() << RESET << endl;
+            float grade;
+            cout << "Pleas enter scour: " << endl;
+            cin >> grade;
+            temp->set_score(grade);
+            cout << MAGENTA << "Grading completed successfully" << RESET << endl;
+        }
+        current = current->get_next_task();
+    }
+    cerr << RED << "Invalid task selection" << RESET << endl;
+}

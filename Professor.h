@@ -24,7 +24,9 @@ public:
     void Add_professor(Professor *&headProfessor, Professor *newprofessor);
     void create_cours(string name,string college,int units,int capacity,float score,float average,string day,string time);
     void display_students(Cours*cours);
-    void create_task(Cours*cours,string description,string deadline);
+    void Professor::create_task(Cours *cours,string nametaske, string description, string deadline);
+    void score_task(Cours*cours,int id,float score);
+
 };
 
 #endif
