@@ -1,6 +1,6 @@
 #include "Cours.h"
 
-Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time,Professor*prof)
+Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
 {
     Coursename = name;
     College = college;
@@ -10,7 +10,7 @@ Cours::Cours(string name, string college, int units, int capacity, float score, 
     Average_Scores = average;
     Day = day;
     Time = time;
-    professor=prof;
+    professor = prof;
 }
 
 void Cours::Addstudent(Student *newstudent)
@@ -21,7 +21,7 @@ void Cours::Addstudent(Student *newstudent)
 
 void Cours::Addtask(Task *newtaske)
 {
-    tasks->set_next_t(newtaske);
+    tasks->set_next_task(newtaske);
     newtaske = tasks;
 }
 
@@ -43,4 +43,14 @@ Task *Cours::get_Tasks()
 string Cours::get_Coursename()
 {
     return Coursename;
+}
+
+Cours *Cours::get_next_cours()
+{
+    return nextcours;
+}
+
+void Cours::set_next_cours(Cours *newcours)
+{
+    nextcours=newcours;
 }

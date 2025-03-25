@@ -17,10 +17,10 @@ public:
     Task(string description,string deadline);
     string get_description();
     string get_deadline();
-    Task* get_next_t();
-    void set_next_t(Task*nexttaske);
+    Task* get_next_task();
+    void set_next_task(Task*nexttaske);
     Submission*get_Submissions();
-    void Add_Submissions(Submission*newsub);
+    //void Add_Submissions(Submission*newsub);
 };
 
 #endif

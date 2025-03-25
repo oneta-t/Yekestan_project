@@ -1,17 +1,23 @@
 #include "Submission.h"
 
-Submission::Submission(string name,string answer,float score)
+Submission::Submission(int id,string answer,float score)
 {
-    student_name=name;
+    //student_name=name;
+    Id=id;
     Answer=answer;
     Score=score;
-    Next_sub=nullptr;
+    //Next_sub=nullptr;
 }
 
-string Submission::get_student_name()
+int Submission::get_id()
 {
-    return student_name;
+    return Id;
 }
+
+// string Submission::get_student_name()
+// {
+//     return student_name;
+// }
 
 string Submission::get_answer()
 {
@@ -23,12 +29,12 @@ float Submission::get_score()
     return Score;
 }
 
-Submission* Submission::get_next_sub()
-{
-    return Next_sub;
-}
+// Submission* Submission::get_next_sub()
+// {
+//     return Next_sub;
+// }
 
-void Submission::set_next_sub(Submission*next_submission)
-{
-    Next_sub=next_submission;
-}
+// void Submission::set_next_sub(Submission*next_submission)
+// {
+//     Next_sub=next_submission;
+// }
