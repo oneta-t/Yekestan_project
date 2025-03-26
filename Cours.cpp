@@ -58,6 +58,16 @@ float Cours::get_average_Scores()
     return Average_Scores;
 }
 
+string Cours::get_Notice()
+{
+    return Notice;
+}
+
+void Cours::set_Notice(string notice)
+{
+    Notice=notice;
+}
+
 void Cours::Addstudent(Student *newstudent)
 {
     students->set_nextS(newstudent);

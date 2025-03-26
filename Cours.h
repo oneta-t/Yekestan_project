@@ -15,6 +15,7 @@ private:
     float Average_Scores;
     string Day;
     string Time;
+    string Notice;
     Professor*professor;
     Student*students;
     Task* tasks;
@@ -30,6 +31,8 @@ public:
     float get_score();
     void set_score(int score);
     float get_average_Scores();
+    string get_Notice();
+    void set_Notice(string notice);
     void Addstudent(Student*newstudent);
     void Addtask(Task*newtaske);
     Professor *get_Professor();
