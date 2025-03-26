@@ -6,7 +6,9 @@ Student::Student(string uname, string pwd, string name, string family, string ma
     Firstname = name;
     Lastname = family;
     Major = major;
-    Id=id;
+    Id = id;
+    list_courses=nullptr;
+    next_S=nullptr;
 }
 
 string Student::get_firstname()
@@ -27,6 +29,15 @@ string Student::get_major()
 int Student::get_id()
 {
     return Id;
+}
+
+Cours *Student::get_list_courses()
+{
+    return list_courses;
+}
+void Student::set_list_courses(Cours *courses)
+{
+    list_courses=courses;
 }
 
 Student *Student::get_nextS()
@@ -74,23 +85,23 @@ void Student::Sign_up_S(Student *&headStudent)
     cin >> major;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
     cin >> username;
-    Student*temp=headStudent;
-    while (temp!=nullptr)
+    Student *temp = headStudent;
+    while (temp != nullptr)
     {
-        while (temp->get_username()==username)
+        while (temp->get_username() == username)
         {
-            cerr<<RED<<"This username already exists. Please enter a new username:"<<RESET<<endl;
+            cerr << RED << "This username already exists. Please enter a new username:" << RESET << endl;
             cin >> username;
         }
-        temp=temp->get_nextS();
-    }    
+        temp = temp->get_nextS();
+    }
     cout << YELLOW << "Pleas enter your password:" << RESET << endl;
     cin >> password1;
     cout << YELLOW << "Please repeat your password again:" << RESET << endl;
     cin >> password2;
-    while (password1!=password2)
+    while (password1 != password2)
     {
-        cerr<<RED<<"The entered password does not match. Please try again and enter passsword:"<<RESET<<endl;
+        cerr << RED << "The entered password does not match. Please try again and enter passsword:" << RESET << endl;
         cin >> password2;
     }
     cout << YELLOW << "Pleas enter your student Id:" << RESET << endl;
