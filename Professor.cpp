@@ -1,5 +1,4 @@
 #include "Professor.h"
-#include "Cours.h"
 
 Professor::Professor(string uname, string pwd, string name, string family, int id) : User(uname, pwd)
 {
@@ -177,6 +176,11 @@ void Professor::score_task(Cours *cours)
 void Professor::score_student()
 {
     Cours *cours = teachingCourse;
+    if (cours == nullptr)
+    {
+        cerr << RED << "You are not offering any courses this semester" << RESET << endl;
+        return;
+    }
     cout << "\033[1;32m" << "List of courses you teach :" << RESET << endl;
     while (cours != nullptr)
     {
@@ -230,6 +234,40 @@ void Professor::score_student()
                 }
                 students->get_nextS();
             }
+        }
+        cours = cours->get_next_cours();
+    }
+}
+
+void Professor::Add_notification()
+{
+    Cours *cours = teachingCourse;
+    if (cours == nullptr)
+    {
+        cerr << RED << "You are not offering any courses this semester" << RESET << endl;
+        return;
+    }
+    cout << "\033[1;32m" << "List of courses you teach :" << RESET << endl;
+    while (cours != nullptr)
+    {
+        cout << GREEN << cours->get_Coursename() << RESET << endl;
+        cours = cours->get_next_cours();
+    }
+    cout << endl;
+    cout << "Please enter the name of the course you want add notice: " << endl;
+    string namecours;
+    cin >> namecours;
+    cours = teachingCourse;
+    while (cours != nullptr)
+    {
+        if (cours->get_Coursename() == namecours)
+        {
+            string notice;
+            cout << "Please enter the text of the notice:" << endl;
+            getline(cin, notice);
+            cours->set_Notice(notice);
+            cout << MAGENTA << "Announcement added successfully" << RESET << endl;
+            return;
         }
         cours = cours->get_next_cours();
     }
