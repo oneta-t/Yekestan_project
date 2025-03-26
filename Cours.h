@@ -28,6 +28,7 @@ public:
     int get_units();
     int get_capacity();
     float get_score();
+    void set_score(int score);
     float get_average_Scores();
     void Addstudent(Student*newstudent);
     void Addtask(Task*newtaske);

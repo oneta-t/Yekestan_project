@@ -22,26 +22,37 @@ string Cours::get_College()
 {
     return College;
 }
+
 string Cours::get_day()
 {
     return Day;
 }
+
 string Cours::get_time()
 {
     return Time;
 }
+
 int Cours::get_units()
 {
     return Units;
 }
+
 int Cours::get_capacity()
 {
     return Capacity;
 }
+
 float Cours::get_score()
 {
     return Score;
 }
+
+void Cours::set_score(int score)
+{
+    Score=score;
+}
+
 float Cours::get_average_Scores()
 {
     return Average_Scores;

@@ -134,17 +134,18 @@ void Professor::create_task(Cours *cours, string nametaske, string description, 
     cours->Addtask(newtasks);
 }
 
-void Professor::score_task(Cours *cours, int id, float score)
+void Professor::score_task(Cours *cours)
 {
     Task *current = cours->get_Tasks();
     cout << "\033[1;32m" << "List of tasks:" << RESET << endl;
     while (current != nullptr)
     {
-        cout << GREEN << current->get_nametask() << "\t" << current->get_deadline() << endl
-             << current->get_description() << RESET << endl;
+        cout << GREEN << current->get_nametask() << "\t" << current->get_deadline() << endl;
+        cout << current->get_description() << RESET << endl;
         current = current->get_next_task();
         cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
     }
+    cout << endl;
     cout << "Pleas enter name of task you want to grad:" << endl;
     string nametask;
     cin >> nametask;
@@ -159,15 +160,77 @@ void Professor::score_task(Cours *cours, int id, float score)
                 cout << RED << "No submissions found for this task" << RESET << endl;
                 return;
             }
-            cout << BLUE << temp->get_student_name() << "\t" << "Studeny ID:" << temp->get_id() << endl
-                 << "Answer: " << temp->get_answer() << RESET << endl;
+            cout << BLUE << temp->get_student_name() << "\t" << "Studeny ID:" << temp->get_id() << endl;
+            cout << "Answer: " << temp->get_answer() << RESET << endl;
             float grade;
             cout << "Pleas enter scour: " << endl;
             cin >> grade;
             temp->set_score(grade);
             cout << MAGENTA << "Grading completed successfully" << RESET << endl;
+            return;
         }
         current = current->get_next_task();
     }
     cerr << RED << "Invalid task selection" << RESET << endl;
+}
+
+void Professor::score_student()
+{
+    Cours *cours = teachingCourse;
+    cout << "\033[1;32m" << "List of courses you teach :" << RESET << endl;
+    while (cours != nullptr)
+    {
+        cout << GREEN << cours->get_Coursename() << RESET << endl;
+        cours = cours->get_next_cours();
+    }
+    cout << endl;
+    cout << "Please enter the name of the course you want: " << endl;
+    string namecours;
+    cin >> namecours;
+    cours = teachingCourse;
+    while (cours != nullptr)
+    {
+        if (cours->get_Coursename() == namecours)
+        {
+            Student *students = cours->get_Students();
+            if (students == nullptr)
+            {
+                cout << RED << "There are no students for this course" << RESET << endl;
+                return;
+            }
+            cout << "\033[1;32m" << "List of students :" << RESET << endl;
+            while (students != nullptr)
+            {
+                cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
+                students->get_nextS();
+            }
+            cout << endl;
+            cout << "Please enter the ID of the student you want to add score: " << endl;
+            int id;
+            cin >> id;
+            students = cours->get_Students();
+            while (students != nullptr)
+            {
+                if (students->get_id() == id)
+                {
+                    float grade;
+                    cout << "Pleas enter scour:" << endl;
+                    cin >> grade;
+                    Cours *list_courses = students->get_list_courses();
+                    while (list_courses != nullptr)
+                    {
+                        if (list_courses == cours)
+                        {
+                            list_courses->set_score(grade);
+                            cout << MAGENTA << "Grading completed successfully" << RESET << endl;
+                            return;
+                        }
+                        list_courses = list_courses->get_next_cours();
+                    }
+                }
+                students->get_nextS();
+            }
+        }
+        cours = cours->get_next_cours();
+    }
 }
