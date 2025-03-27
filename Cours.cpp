@@ -11,6 +11,7 @@ Cours::Cours(string name, string college, int units, int capacity, float score, 
     Day = day;
     Time = time;
     professor = prof;
+    registeredS = 0;
 }
 
 string Cours::get_Coursename()
@@ -50,7 +51,7 @@ float Cours::get_score()
 
 void Cours::set_score(int score)
 {
-    Score=score;
+    Score = score;
 }
 
 float Cours::get_average_Scores()
@@ -65,13 +66,19 @@ string Cours::get_Notice()
 
 void Cours::set_Notice(string notice)
 {
-    Notice=notice;
+    Notice = notice;
 }
 
 void Cours::Addstudent(Student *newstudent)
 {
+    if (Capacity < registeredS)
+    {
+        cerr << RED << "Course capacity is full! Cannot add more students" << RESET << endl;
+        return;
+    }
     students->set_nextS(newstudent);
     newstudent = students;
+    registeredS++;
 }
 
 void Cours::Addtask(Task *newtaske)
@@ -103,4 +110,35 @@ Cours *Cours::get_next_cours()
 void Cours::set_next_cours(Cours *newcours)
 {
     nextcours = newcours;
+}
+
+void Cours::Calculate_average()
+{
+    float sum;
+    int count;
+    Student *temp = students;
+    if (temp == nullptr)
+    {
+        cerr << RED << "You are not any student for this course" << RESET << endl;
+        return;
+    }
+    while (temp != nullptr)
+    {
+        Cours *tempcours = temp->get_list_courses();
+        while (tempcours != nullptr)
+        {
+            if (Coursename == tempcours->get_Coursename())
+            {
+                sum += tempcours->get_score();
+                ++count;
+                temp = temp->get_nextS();
+            }
+            tempcours = tempcours->get_next_cours();
+        }
+        temp=temp->get_nextS();
+    }
+    if (count > 0)
+    {
+        Average_Scores = sum / count;
+    }
 }

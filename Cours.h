@@ -11,6 +11,7 @@ private:
     string College;
     int Units;    
     int Capacity;
+    int registeredS;
     float Score;
     float Average_Scores;
     string Day;
@@ -39,7 +40,8 @@ public:
     Student *get_Students();
     Task *get_Tasks();
     Cours* get_next_cours();
-    void set_next_cours(Cours* newcours);
+    void set_next_cours(Cours* newcours);   
+    void Calculate_average();
 };
 
 #endif;
