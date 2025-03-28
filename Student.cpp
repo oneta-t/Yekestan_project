@@ -7,8 +7,8 @@ Student::Student(string uname, string pwd, string name, string family, string ma
     Lastname = family;
     Major = major;
     Id = id;
-    list_courses=nullptr;
-    next_S=nullptr;
+    list_courses = nullptr;
+    next_S = nullptr;
 }
 
 string Student::get_firstname()
@@ -37,7 +37,7 @@ Cours *Student::get_list_courses()
 }
 void Student::set_list_courses(Cours *courses)
 {
-    list_courses=courses;
+    list_courses = courses;
 }
 
 Student *Student::get_nextS()
@@ -120,20 +120,63 @@ void Student::Add_student(Student *&headStudent, Student *newstudent)
 
 void Student::View_registered_courses()
 {
-    Cours *courses=list_courses;
+    Cours *courses = list_courses;
     if (courses == nullptr)
     {
         cerr << RED << "You have not taken any courses this semester." << RESET << endl;
         return;
     }
     cout << "\033[1;32m" << "List of courses you have taken this semester :" << RESET << endl;
-    while (courses!=nullptr)
+    while (courses != nullptr)
     {
-        cout<<GREEN<<courses->get_Coursename()<<"       College: "<<courses->get_College()<<"       Time: "<<courses->get_day()<<"-->"<<courses->get_time();
-        cout<<endl<<courses->get_Professor()->get_firstname()<<"       Average_Scores: "<<courses->get_average_Scores();
-        cout<<endl<<"َََََAnnouncement: "<<courses->get_Notice()<<RESET<<endl;
-        courses=courses->get_next_cours();
+        cout << GREEN << courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
+        cout << endl;
+        cout<< "Average_Scores: " << courses->get_average_Scores() << "        Score: " << courses->get_score();
+        cout << endl;
+        cout  << "Announcement: " << courses->get_Notice() << RESET << endl;
+        courses = courses->get_next_cours();
         cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
     }
+    cout << endl;
+}
+
+void Student::view_Available_Courses(Cours *allcourses)
+{
+    string currentCollege = "";
+    Cours *current = allcourses;
+    if (current == nullptr)
+    {
+        cerr << RED << "You have not taken any courses this semester." << RESET << endl;
+        return;
+    }
+    cout << "\033[1;32m" << "List of courses offered this semester :" << RESET << endl;
     cout<<endl;
+    while (current != nullptr)
+    {
+        bool collegeExists = false;
+        Cours *check = allcourses;
+        while (check != nullptr)
+        {
+            if (check->get_College() == current->get_College())
+            {
+                collegeExists = true;
+                break;
+            }
+            check = check->get_next_cours();
+        }
+        if (collegeExists == true)
+        {
+            cout<<GREEN<<"     ==== College "<<current->get_College()<<" ====     "<<RESET<<endl;
+            Cours *courses = allcourses;
+            while (courses!=nullptr)
+            {
+                if (courses->get_College()==current->get_College())
+                {
+                    cout<<GREEN << courses->get_Coursename()<<"       Time: " << courses->get_day() << "-->" << courses->get_time()<<"        Units: "<<courses->get_units()<<"         Number of people registered: ( "<<courses->get_registeredS()<<"/"<<courses->get_capacity()<<" )"<<RESET<<endl;
+                }
+                courses=courses->get_next_cours();
+            } 
+        }
+        current=current->get_next_cours();
+    }
 }

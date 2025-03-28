@@ -27,7 +27,7 @@ public:
     void Sign_up_S(Student *&headStudent);
     void Add_student(Student *&headStudent, Student *newstudent);
     void View_registered_courses();
-    
+    void view_Available_Courses(Cours* allcourses);
 };
 
 
