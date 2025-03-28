@@ -29,6 +29,7 @@ public:
     string get_time();
     int get_units();
     int get_capacity();
+    int get_registeredS();
     float get_score();
     void set_score(int score);
     float get_average_Scores();

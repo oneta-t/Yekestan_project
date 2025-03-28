@@ -44,6 +44,11 @@ int Cours::get_capacity()
     return Capacity;
 }
 
+int Cours::get_registeredS()
+{
+    return registeredS;
+}
+
 float Cours::get_score()
 {
     return Score;
