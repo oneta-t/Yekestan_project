@@ -28,6 +28,8 @@ public:
     void Add_student(Student *&headStudent, Student *newstudent);
     void View_registered_courses();
     void view_Available_Courses(Cours* allcourses);
+    void Course_registration(Cours *allcourses);
+    void viewTaskGrades(Cours* allcourse);
 };
 
 
