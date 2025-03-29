@@ -22,7 +22,7 @@ public:
     void Sign_in(Professor *&headProfessor);
     void Sign_up_P(Professor *&headProfessor);
     void Add_professor(Professor *&headProfessor, Professor *newprofessor);
-    void create_cours(string name,string college,int units,int capacity,float score,float average,string day,string time);
+    void create_cours(string name,string profname,string profamily,string college,int units,int capacity,float score,float average,string day,string time);
     void display_students(Cours*cours);
     void create_task(Cours *cours,string nametaske, string description, string deadline);
     void score_task(Cours*cours);//اینجا هم فکنم بشه حتی درس رو نفرستاد و خود استاد بعد انتخاب کنه تهش اگه برا تابع بعدی درست بود اینم درستش میکنم

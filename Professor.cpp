@@ -99,16 +99,17 @@ void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor
     headProfessor = newprofessor;
 }
 
-void Professor::create_cours(string name, string college, int units, int capacity, float score, float average, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
+void Professor::create_cours(string name,string profname,string profamily, string college, int units, int capacity, float score, float average, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
 {
-    Cours *newcours = new Cours(name, college, units, capacity, score, average, day, time, this);
+    //Cours *newcours = new Cours(name, college, units, capacity, score, average, day, time, this);
+    Cours *newcours = new Cours(name, college,profname,profamily, units, capacity, score, average, day, time);
     newcours->set_next_cours(teachingCourse);
     teachingCourse = newcours;
 }
 
 void Professor::display_students(Cours *cours)
 {
-    if (cours->get_Professor() != this)
+    if (cours->get_Professorname() !=Firstname || cours->get_Professorfamaly()!=Lastname)
     {
         cerr << RED << "This cours does not belong to you" << RESET << endl;
         return;
@@ -124,7 +125,7 @@ void Professor::display_students(Cours *cours)
 
 void Professor::create_task(Cours *cours, string nametaske, string description, string deadline)
 {
-    if (cours->get_Professor() != this)
+    if (cours->get_Professorname() !=Firstname || cours->get_Professorfamaly()!=Lastname)
     {
         cerr << RED << "This cours does not belong to you" << RESET << endl;
         return;
