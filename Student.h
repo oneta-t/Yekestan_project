@@ -29,7 +29,8 @@ public:
     void View_registered_courses();
     void view_Available_Courses(Cours* allcourses);
     void Course_registration(Cours *allcourses);
-    void viewTaskGrades(Cours* allcourse);
+    void viewTaskGrades();
+    void Responding_to_task(); 
 };
 
 
