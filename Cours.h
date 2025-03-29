@@ -7,8 +7,12 @@
 class Cours
 {
 private:
+    int ID;
+    static int nextId;
     string Coursename;
     string College;
+    string professorname;
+    string professorfamaiy;
     int Units;    
     int Capacity;
     int registeredS;
@@ -17,13 +21,17 @@ private:
     string Day;
     string Time;
     string Notice;
-    Professor*professor;
+    //Professor*professor;
     Student*students;
     Task* tasks;
     Cours *nextcours;
 public:
-    Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
+    //Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
+    Cours(string name,string college,string prof,string profamily,int units,int capacity,float score,float average,string day,string time);
+    int get_id();
     string get_Coursename();
+    string get_Professorname();
+    string get_Professorfamaly();
     string get_College();
     string get_day();
     string get_time();
@@ -37,7 +45,7 @@ public:
     void set_Notice(string notice);
     void Addstudent(Student*newstudent);
     void Addtask(Task*newtaske);
-    Professor *get_Professor();
+    //Professor *get_Professor();
     Student *get_Students();
     Task *get_Tasks();
     Cours* get_next_cours();
