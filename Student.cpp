@@ -140,7 +140,7 @@ void Student::View_registered_courses()
     cout << endl;
 }
 
-void Student::view_Available_Courses(Cours *allcourses)//میشه اگه وقت کردم طوری پیاده سازی کنم که درسو انتخاب کنه از لیست و بعد اطلاعات و ... براش نمایان بشه
+void Student::view_Available_Courses(Cours *allcourses) // میشه اگه وقت کردم طوری پیاده سازی کنم که درسو انتخاب کنه از لیست و بعد اطلاعات و ... براش نمایان بشه
 {
     string currentCollege = "";
     Cours *current = allcourses;
@@ -223,10 +223,108 @@ void Student::Course_registration(Cours *allcourses)
             cerr << RED << "You are already registered for this course!" << RESET << endl;
             return;
         }
-        registeredC=registeredC->get_next_cours();
+        registeredC = registeredC->get_next_cours();
     }
     targetCourse->Addstudent(this);
     targetCourse->set_next_cours(list_courses);
-    list_courses=targetCourse;
+    list_courses = targetCourse;
     cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+}
+
+void Student::view_Task_Grades()
+{
+    cout << "Please enter the course ID you want to see task score: " << endl;
+    int num;
+    cin >> num;
+    Cours *courses = list_courses;
+    if (courses == nullptr)
+    {
+        cerr << RED << "You have not taken any courses this semester." << RESET << endl;
+        return;
+    }
+    while (courses != nullptr)
+    {
+        if (courses->get_id() == num)
+        {
+            Task *tasks = courses->get_Tasks();
+            if (tasks == nullptr)
+            {
+                cerr << RED << "There are no tasks for this course." << RESET << endl;
+                return;
+            }
+            int count = 0;
+            while (tasks != nullptr)
+            {
+                Submission *sub = tasks->get_Submissions();
+                if (sub == nullptr)
+                {
+                    cerr << RED << "There are no submissions for this task." << RESET << endl;
+                    return;
+                }
+                ++count;
+                cout << GREEN << "Task" << count << " --> " << tasks->get_nametask() << "         Score: " << sub->get_score() << RESET << endl;
+                cout << endl;
+                tasks = tasks->get_next_task();
+            }
+            return;
+        }
+        courses = courses->get_next_cours();
+    }
+}
+
+void Student::Answer_to_task()
+{
+    cout << "Please enter the course ID you want to add submission: " << endl;
+    int num;
+    cin >> num;
+    Cours *courses = list_courses;
+    if (courses == nullptr)
+    {
+        cerr << RED << "You have not taken any courses this semester." << RESET << endl;
+        return;
+    }
+    while (courses!=nullptr)
+    {
+        if (courses->get_id() == num)
+        {
+            Task *tasks = courses->get_Tasks();
+            if (tasks == nullptr)
+            {
+                cerr << RED << "There are no tasks for this course." << RESET << endl;
+                return;
+            }
+            int count=0;
+            cout << "\033[1;32m" << "List of tasks:" << RESET << endl;
+            while (tasks!=nullptr)
+            {
+                ++count;
+                cout << GREEN << "Task" << count << " --> " << tasks->get_nametask()<<RESET<<endl;
+                cout<<endl;
+                tasks->get_next_task();
+            }
+            cout << "Please enter the name of taske you want: " << endl;
+            string name;
+            cin>>name;
+            tasks = courses->get_Tasks();
+            while (tasks!=nullptr)
+            {
+                if (name==tasks->get_nametask())
+                {
+                    cout<<GREEN<<"Deadline: "<<tasks->get_deadline()<<"          Description: "<<tasks->get_description()<<RESET<<endl;
+                    cout<<"Please enter your answer for this task:"<<endl;
+                    string answer;
+                    getline(cin,answer);
+                    tasks->Add_Submissions(this->Firstname,this->Id,answer);
+                    cout << MAGENTA << "✨ Your answer was successfully added ✨" << RESET << endl;
+                    return;
+                }
+                tasks=tasks->get_next_task();
+            }
+            cerr<<RED<<"There is no task with that name."<<RESET<<endl;
+            return;
+        }
+        courses = courses->get_next_cours();
+    }   
+    cerr<<RED<<"There is no courrse with that ID."<<RESET<<endl;
+    return;
 }
