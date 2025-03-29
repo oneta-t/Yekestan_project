@@ -22,7 +22,7 @@ public:
     Task* get_next_task();
     void set_next_task(Task*nexttaske);
     Submission*get_Submissions();
-    //void Add_Submissions(Submission*newsub);
+    void Add_Submissions(string studentname,int Id,string answer);
 };
 
 #endif

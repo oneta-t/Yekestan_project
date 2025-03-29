@@ -39,8 +39,11 @@ Submission *Task::get_Submissions()
     return submission;
 }
 
-// void Task::Add_Submissions(Submission*newsub)
-// {
-//     newsub->set_next_sub(submission);
-//     submission=newsub;
-// }
+void Task::Add_Submissions(string studentname,int id,string answer)
+{
+    if (submission!=nullptr)
+    {
+        delete submission;
+    }
+    submission=new Submission(id,studentname,answer,0.0);
+}
