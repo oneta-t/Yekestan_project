@@ -18,9 +18,19 @@ string Professor::get_lastname()
     return Lastname;
 }
 
-int Student::get_id()
+int Professor::get_id()
 {
     return Id;
+}
+
+bool Professor::get_isActiveP()
+{
+    return isActiveP;
+}
+
+void Professor::set_isActiveP(bool x)
+{
+    isActiveP=x;
 }
 
 Professor *Professor::get_nextP()

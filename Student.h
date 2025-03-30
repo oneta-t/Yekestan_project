@@ -12,6 +12,7 @@ private:
     Student *next_S;
     Cours* list_courses;
     int Id;
+    bool isActiveS;
 
 public:
     Student(string uname, string pwd, string name, string family, string major, int id);
@@ -19,9 +20,11 @@ public:
     string get_lastname();
     string get_major();
     int get_id();
-    Student *get_nextS();
+    bool get_isActiveS();
+    void set_isActiveS(bool x);
     Cours* get_list_courses();
     void set_list_courses(Cours*courses);
+    Student *get_nextS();
     void set_nextS(Student *nextS);
     void Sign_in_S(Student *&headStudent);
     void Sign_up_S(Student *&headStudent);

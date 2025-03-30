@@ -11,12 +11,15 @@ private:
     int Id;
     Professor *next_P;
     Cours* teachingCourse;
+    bool isActiveP;
     // شاید یه چیزی برای اطلاعیه مثلا در نظر بگیریم
 public:
     Professor(string uname, string pwd, string name, string family, int id);
     string get_firstname();
     string get_lastname();
     int get_id();
+    bool get_isActiveP();
+    void set_isActiveP(bool x);
     Professor *get_nextP();
     void set_nextP(Professor *nextP);
     void Sign_in(Professor *&headProfessor);

@@ -9,6 +9,7 @@ Student::Student(string uname, string pwd, string name, string family, string ma
     Id = id;
     list_courses = nullptr;
     next_S = nullptr;
+    isActiveS = true;
 }
 
 string Student::get_firstname()
@@ -29,6 +30,16 @@ string Student::get_major()
 int Student::get_id()
 {
     return Id;
+}
+
+bool Student::get_isActiveS()
+{
+    return isActiveS;
+}
+
+void Student::set_isActiveS(bool x)
+{
+    isActiveS=x;
 }
 
 Cours *Student::get_list_courses()
@@ -283,7 +294,7 @@ void Student::Answer_to_task()
         cerr << RED << "You have not taken any courses this semester." << RESET << endl;
         return;
     }
-    while (courses!=nullptr)
+    while (courses != nullptr)
     {
         if (courses->get_id() == num)
         {
@@ -293,38 +304,38 @@ void Student::Answer_to_task()
                 cerr << RED << "There are no tasks for this course." << RESET << endl;
                 return;
             }
-            int count=0;
+            int count = 0;
             cout << "\033[1;32m" << "List of tasks:" << RESET << endl;
-            while (tasks!=nullptr)
+            while (tasks != nullptr)
             {
                 ++count;
-                cout << GREEN << "Task" << count << " --> " << tasks->get_nametask()<<RESET<<endl;
-                cout<<endl;
+                cout << GREEN << "Task" << count << " --> " << tasks->get_nametask() << RESET << endl;
+                cout << endl;
                 tasks->get_next_task();
             }
             cout << "Please enter the name of taske you want: " << endl;
             string name;
-            cin>>name;
+            cin >> name;
             tasks = courses->get_Tasks();
-            while (tasks!=nullptr)
+            while (tasks != nullptr)
             {
-                if (name==tasks->get_nametask())
+                if (name == tasks->get_nametask())
                 {
-                    cout<<GREEN<<"Deadline: "<<tasks->get_deadline()<<"          Description: "<<tasks->get_description()<<RESET<<endl;
-                    cout<<"Please enter your answer for this task:"<<endl;
+                    cout << GREEN << "Deadline: " << tasks->get_deadline() << "          Description: " << tasks->get_description() << RESET << endl;
+                    cout << "Please enter your answer for this task:" << endl;
                     string answer;
-                    getline(cin,answer);
-                    tasks->Add_Submissions(this->Firstname,this->Id,answer);
+                    getline(cin, answer);
+                    tasks->Add_Submissions(this->Firstname, this->Id, answer);
                     cout << MAGENTA << "✨ Your answer was successfully added ✨" << RESET << endl;
                     return;
                 }
-                tasks=tasks->get_next_task();
+                tasks = tasks->get_next_task();
             }
-            cerr<<RED<<"There is no task with that name."<<RESET<<endl;
+            cerr << RED << "There is no task with that name." << RESET << endl;
             return;
         }
         courses = courses->get_next_cours();
-    }   
-    cerr<<RED<<"There is no courrse with that ID."<<RESET<<endl;
+    }
+    cerr << RED << "There is no courrse with that ID." << RESET << endl;
     return;
 }
