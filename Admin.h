@@ -12,7 +12,7 @@ public:
     void view_all_professors(Professor *headProfessor);
     void view_all_courses(Cours *headCourse);
     void create_student(Student*& headStudent);
-
+    void create_professor(Professor*& headProfessor);
 };
 
 #endif

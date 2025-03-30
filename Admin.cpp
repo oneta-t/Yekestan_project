@@ -64,7 +64,71 @@ void Admin::view_all_courses(Cours *headCourse)
 }
 
 
-void create_student(Student*& headStudent)
+void Admin::create_student(Student*& headStudent)
 {
-    
+    cout<<"Please enter the firstname: "<<endl;
+    string name;
+    cin>>name;
+    cout<<"Please enter the lastname: "<<endl;
+    string family;
+    cin>>family;
+    cout<<"Please enter the major: "<<endl;
+    string major;
+    cin>>major;
+    cout<<"Please enter the student ID: "<<endl;
+    int Id;
+    cin>>Id;
+    cout<<"Please enter the username: "<<endl;
+    string username;
+    cin>>username;
+    Student*current=headStudent;
+    while (current!=nullptr)
+    {
+        while(username==current->get_username())
+        {
+            cerr << RED << "This username already exists. Please enter a new username:" << RESET << endl;
+            cin >> username;
+        }
+        current=current->get_nextS();
+    }
+    cout<<"Please enter the password: "<<endl;
+    string pass;
+    cin>>pass;
+    Student* newStudent = new Student(username, pass, name, family, major, Id);
+    newStudent->set_nextS(headStudent);
+    headStudent = newStudent;
+    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+}
+
+void Admin::create_professor(Professor*& headProfessor)
+{
+    cout<<"Please enter the firstname: "<<endl;
+    string name;
+    cin>>name;
+    cout<<"Please enter the lastname: "<<endl;
+    string family;
+    cin>>family;
+    cout<<"Please enter the professor ID: "<<endl;
+    int Id;
+    cin>>Id;
+    cout<<"Please enter the username: "<<endl;
+    string username;
+    cin>>username;
+    Professor*prof=headProfessor;
+    while (prof!=nullptr)
+    {
+        while(username==prof->get_username())
+        {
+            cerr << RED << "This username already exists. Please enter a new username:" << RESET << endl;
+            cin >> username;
+        }
+        prof=prof->get_nextP();
+    }
+    cout<<"Please enter the password: "<<endl;
+    string pass;
+    cin>>pass;
+    Professor*newprof= new Professor(username,pass,name,family,Id);
+    newprof->set_nextP(headProfessor);
+    headProfessor=newprof;
+    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
 }
