@@ -12,7 +12,6 @@ private:
     Professor *next_P;
     Cours* teachingCourse;
     bool isActiveP;
-    // شاید یه چیزی برای اطلاعیه مثلا در نظر بگیریم
 public:
     Professor(string uname, string pwd, string name, string family, int id);
     string get_firstname();
