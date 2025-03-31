@@ -157,7 +157,7 @@ void Admin::delete_student(Student* headStudent)
     cerr<<RED<<"There is no student with this ID in the student list."<<RESET<<endl;
 }
 
-void delete_professor(Professor* headProfessor)
+void Admin::delete_professor(Professor* headProfessor)
 {
     cout<<"Please enter the student ID of the professor you want to delete: "<<endl;
     int id;
@@ -178,5 +178,53 @@ void delete_professor(Professor* headProfessor)
         }
         current=current->get_nextP();
     }  
-    cerr<<RED<<"There is no professor with this ID in the student list."<<RESET<<endl;
+    cerr<<RED<<"There is no professor with this ID in the professor list."<<RESET<<endl;
+}
+
+void Admin::restore_student(Student* headStudent)
+{
+    cout<<"Please enter the student ID of the student you want to restore: "<<endl;
+    int id;
+    cin>>id;
+    Student*current=headStudent;
+    if (current == nullptr)
+    {
+        cerr << RED << "The student list is empty." << RESET << endl;
+        return;
+    }
+    while (current!=nullptr)
+    {
+        if (id==current->get_id())
+        {
+            current->set_isActiveS(true);
+            cout << MAGENTA << "✨ Student successfully restore ✨" << RESET << endl;
+            return;
+        }
+        current=current->get_nextS();
+    }  
+    cerr<<RED<<"There is no student with this ID in the student list."<<RESET<<endl;
+}
+
+void Admin::restore_professor(Professor* headProfessor)
+{
+    cout<<"Please enter the student ID of the professor you want to restore: "<<endl;
+    int id;
+    cin>>id;
+    Professor*current=headProfessor;
+    if (current == nullptr)
+    {
+        cerr << RED << "The professor list is empty." << RESET << endl;
+        return;
+    }
+    while (current!=nullptr)
+    {
+        if (id==current->get_id())
+        {
+            current->set_isActiveP(false);
+            cout << MAGENTA << "✨ professor successfully restore ✨" << RESET << endl;
+            return;
+        }
+        current=current->get_nextP();
+    }  
+    cerr<<RED<<"There is no professor with this ID in the professor list."<<RESET<<endl;
 }

@@ -14,7 +14,9 @@ public:
     void create_student(Student*& headStudent);
     void create_professor(Professor*& headProfessor);
     void delete_student(Student* headStudent);
-    void delete_professor(Professor headProfessor);
+    void delete_professor(Professor* headProfessor);
+    void restore_student(Student* headStudent);
+    void restore_professor(Professor* headProfessor);
 };
 
 #endif
