@@ -29,6 +29,7 @@ public:
     //Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
     Cours(string name,string college,string prof,string profamily,int units,int capacity,float score,float average,string day,string time);
     int get_id();
+    void set_id(int id);
     string get_Coursename();
     string get_Professorname();
     string get_Professorfamaly();
@@ -38,6 +39,7 @@ public:
     int get_units();
     int get_capacity();
     int get_registeredS();
+    void set_registeredS(int regist);
     float get_score();
     void set_score(int score);
     float get_average_Scores();

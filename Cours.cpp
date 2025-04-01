@@ -1,8 +1,8 @@
 #include "Cours.h"
 
-int Cours::nextId=0;
-//Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
-Cours::Cours(string name, string college,string profname,string profamily, int units, int capacity, float score, float average, string day, string time)
+int Cours::nextId = 0;
+// Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
+Cours::Cours(string name, string college, string profname, string profamily, int units, int capacity, float score, float average, string day, string time)
 {
     Coursename = name;
     College = college;
@@ -13,14 +13,19 @@ Cours::Cours(string name, string college,string profname,string profamily, int u
     Day = day;
     Time = time;
     professorname = profname;
-    professorfamaiy=profamily;
+    professorfamaiy = profamily;
     registeredS = 0;
-    ID=++nextId;
+    ID = ++nextId;
 }
 
 int Cours::get_id()
 {
     return ID;
+}
+
+void Cours::set_id(int id)
+{
+    ID = id;
 }
 
 string Cours::get_Coursename()
@@ -66,6 +71,11 @@ int Cours::get_capacity()
 int Cours::get_registeredS()
 {
     return registeredS;
+}
+
+void Cours::set_registeredS(int regist)
+{
+    registeredS = regist;
 }
 
 float Cours::get_score()
@@ -159,7 +169,7 @@ void Cours::Calculate_average()
             }
             tempcours = tempcours->get_next_cours();
         }
-        temp=temp->get_nextS();
+        temp = temp->get_nextS();
     }
     if (count > 0)
     {

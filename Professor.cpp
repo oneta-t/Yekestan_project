@@ -30,7 +30,7 @@ bool Professor::get_isActiveP()
 
 void Professor::set_isActiveP(bool x)
 {
-    isActiveP=x;
+    isActiveP = x;
 }
 
 Professor *Professor::get_nextP()
@@ -194,11 +194,11 @@ void Professor::score_task()
                         if (STDcours->get_id() == cours->get_id())
                         {
                             Task *current = STDcours->get_Tasks();
-                            int count=0;
+                            int count = 0;
                             while (current != nullptr)
                             {
                                 ++count;
-                                cout<<"Task"<<count<<") "<<current->get_nametask()<<endl;
+                                cout << "Task" << count << ") " << current->get_nametask() << endl;
                                 Submission *temp = current->get_Submissions();
                                 if (temp == nullptr)
                                 {
@@ -361,4 +361,14 @@ void Professor::Add_notification()
         }
         cours = cours->get_next_cours();
     }
+}
+
+Cours *Professor::get_teachingCourse()
+{
+    return teachingCourse;
+}
+
+void Professor::set_teachingCourse(Cours*courses)
+{
+    teachingCourse=courses;
 }

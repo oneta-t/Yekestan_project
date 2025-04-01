@@ -30,6 +30,8 @@ public:
     void score_task();
     void score_student();
     void Add_notification();
+    Cours*get_teachingCourse();
+    void set_teachingCourse(Cours*courses);
     //یک متد هم باید بزاریم برا اینکه درسو بتونه ظرفیت براش تغییر بده
 
 };

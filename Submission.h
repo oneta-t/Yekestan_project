@@ -20,6 +20,7 @@ public:
     string get_answer();
     float get_score();
     void set_score(float scour);
+    void set_student_name(string name);
     // Submission* get_next_sub();
     // void Submission::set_next_sub(Submission*next_submission);
 };
