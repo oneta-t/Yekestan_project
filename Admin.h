@@ -19,4 +19,6 @@ public:
     void restore_professor(Professor* headProfessor);
 };
 
+void Admin_page(Cours*headcourse,Student*headstd,Professor*headprof); 
+
 #endif

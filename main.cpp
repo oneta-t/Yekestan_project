@@ -15,6 +15,7 @@ int main()
     {
         cout << GREEN << "Please select one of the items.For example, if you are a student and want to register, enter number 35 or if you are a professor and have already registered, enter number 24, if you are also an admin, enter only the number 1 and end with the number 0" << endl;
         cout << "1)I'm Admin\n2)I'm Professor\n3)I'm Student\n4)I have already registered\n5)I want to register now" << RESET << endl;
+        cout<<"Please enter the desired number: "<<endl;
         int num;
         cin >> num;
         switch (num)
