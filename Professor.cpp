@@ -43,7 +43,7 @@ void Professor::set_nextP(Professor *nextP)
     next_P = nextP;
 }
 
-void Professor::Sign_in(Professor *&headProfessor)
+void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses)
 {
     string username, password;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
@@ -57,7 +57,7 @@ void Professor::Sign_in(Professor *&headProfessor)
         if (temp->get_username() == username && temp->get_password() == password)
         {
             cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
-            // اینجا باید ببینیم که آیا فرد دانشجو هست یا استاد که بتونه وارد بخش کاربری خودش بره
+            this->professor_page(headProfessor, courses);
             return;
         }
         temp = temp->get_nextP();
@@ -109,10 +109,10 @@ void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor
     headProfessor = newprofessor;
 }
 
-void Professor::create_cours(string name, string profname, string profamily, string college, int units, int capacity, float score, float average, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
+void Professor::create_cours(string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
 {
     // Cours *newcours = new Cours(name, college, units, capacity, score, average, day, time, this);
-    Cours *newcours = new Cours(name, college, profname, profamily, units, capacity, score, average, day, time);
+    Cours *newcours = new Cours(name, college, profname, profamily, units, capacity, day, time);
     newcours->set_next_cours(teachingCourse);
     teachingCourse = newcours;
 }
@@ -368,7 +368,132 @@ Cours *Professor::get_teachingCourse()
     return teachingCourse;
 }
 
-void Professor::set_teachingCourse(Cours*courses)
+void Professor::set_teachingCourse(Cours *courses)
 {
-    teachingCourse=courses;
+    teachingCourse = courses;
+}
+
+void Professor::professor_page(Professor *Prof, Cours *courses)
+{
+    cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
+    cout << endl;
+    while (1)
+    {
+        cout << GREEN << "Please select one of the items." << endl;
+        cout << "1)Create a new course\t2)Showing the students of a course\n3)Create a new task for course\t4)Grading tasks\n5)Grading students\t6)Add notification\n7)View the course you teach\t0)end" << RESET << endl;
+        cout << "Please enter the desired number: " << endl;
+        int num;
+        cin >> num;
+        switch (num)
+        {
+        case 0:
+            return;
+        case 1:
+        {
+            cout << "Please enter the name of course: " << endl;
+            string name, profname, profamily, college, day, time;
+            cin >> name;
+            profname = this->Firstname;
+            profamily = this->Lastname;
+            cout << "Please enter the relevant College: " << endl;
+            cin >> college;
+            cout << "Please enter the class day(For example:Saturday-Monday): " << endl;
+            cin >> day;
+            cout << "Please enter the class time(For example:15:00-17:00): " << endl;
+            cin >> time;
+            int units, capacity;
+            cout << "Please enter the number of course units: " << endl;
+            cin >> units;
+            cout << "Please specify the course capacity: " << endl;
+            cin >> capacity;
+            this->create_cours(name, profname, profamily, college, units, capacity, day, time);
+            break;
+        }
+        case 2:
+        {
+            cout << "Please enter the course ID for which you want to see the students: " << endl;
+            int num;
+            cin >> num;
+            Cours *current = courses;
+            if (current == nullptr)
+            {
+                cerr << RED << "There are no courses offered this semester." << RESET << endl;
+                return;
+            }
+            while (current != nullptr)
+            {
+                if (current->get_id() == num)
+                {
+                    this->display_students(current);
+                    break;
+                }
+                current = current->get_next_cours();
+            }
+            cerr << RED << "There is no courrse with that ID." << RESET << endl;
+        }
+        break;
+        case 3:
+        {
+            cout << "Please enter the course ID for which you want to see the students: " << endl;
+            int num;
+            cin >> num;
+            Cours *current = courses;
+            if (current == nullptr)
+            {
+                cerr << RED << "There are no courses offered this semester." << RESET << endl;
+                return;
+            }
+            while (current != nullptr)
+            {
+                if (current->get_id() == num)
+                {
+                    cout << "Please enter the task name: " << endl;
+                    string nametaske, description, deadline;
+                    getline(cin, nametaske);
+                    cout << "Please enter the description: " << endl;
+                    getline(cin, description);
+                    cout << "Please specify the deadline: " << endl;
+                    getline(cin, deadline);
+                    this->create_task(current, nametaske, description, deadline);
+                    break;
+                }
+                current = current->get_next_cours();
+            }
+            cerr << RED << "There is no courrse with that ID." << RESET << endl;
+        }
+        break;
+        case 4:
+            this->score_task();
+            break;
+        case 5:
+            this->score_student();
+            break;
+        case 6:
+            this->Add_notification();
+            break;
+        case 7:
+            this->view_courses();
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void Professor::view_courses()
+{
+    Cours *courses = teachingCourse;
+    if (courses == nullptr)
+    {
+        cerr << RED << "You have not taken any courses this semester." << RESET << endl;
+        return;
+    }
+    cout << "\033[1;32m" << "List of courses you have taken this semester :" << RESET << endl;
+    while (courses != nullptr)
+    {
+        cout << GREEN << "Id: " << courses->get_id() << "      Name: " << courses->get_Coursename() << "       College: " << courses->get_College() << RESET << endl;
+        cout << endl;
+        courses = courses->get_next_cours();
+    }
+    cout << endl;
 }

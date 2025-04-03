@@ -21,10 +21,10 @@ public:
     void set_isActiveP(bool x);
     Professor *get_nextP();
     void set_nextP(Professor *nextP);
-    void Sign_in(Professor *&headProfessor);
+    void Sign_in_P(Professor *&headProfessor,Cours*courses);
     void Sign_up_P(Professor *&headProfessor);
     void Add_professor(Professor *&headProfessor, Professor *newprofessor);
-    void create_cours(string name,string profname,string profamily,string college,int units,int capacity,float score,float average,string day,string time);
+    void create_cours(string name,string profname,string profamily,string college,int units,int capacity,string day,string time);
     void display_students(Cours*cours);
     void create_task(Cours *cours,string nametaske, string description, string deadline);
     void score_task();
@@ -32,6 +32,8 @@ public:
     void Add_notification();
     Cours*get_teachingCourse();
     void set_teachingCourse(Cours*courses);
+    void professor_page(Professor *Prof,Cours*courses);
+    void view_courses();
     //یک متد هم باید بزاریم برا اینکه درسو بتونه ظرفیت براش تغییر بده
 
 };
