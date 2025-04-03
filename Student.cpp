@@ -68,7 +68,7 @@ void Student::student_page(Cours *courses, Student *student)
     while (1)
     {
         cout << GREEN << "Please select one of the items." << endl;
-        cout << "1)View registered courses this semester\t2)View available courses this semester\n3)Register for the desired course\t4)View task scores\n5)Answerthe tasks\t0)end" << RESET << endl; // برای نمره به درس هم بزار
+        cout << "1)View registered courses this semester\t2)View available courses this semester\n3)Register for the desired course\t4)View task scores\n5)Answerthe tasks\t0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
@@ -93,7 +93,7 @@ void Student::student_page(Cours *courses, Student *student)
             STD->Answer_to_task();
             break;
         case 6:
-            /* code */
+            STD->Grading_course();
             break;
         default:
             cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;

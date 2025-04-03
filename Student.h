@@ -36,7 +36,6 @@ public:
     void Answer_to_task(); 
     void student_page(Cours *courses, Student *student);
     void Grading_course();
-    //یدونه برا این باید بنویسی که بتونه به هر درس یه نمره خاص بده و فقط ادمین بتونه بنویسه اونو
 };
 
 #endif

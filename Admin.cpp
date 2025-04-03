@@ -234,7 +234,7 @@ void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
     cout << endl;
     while (1)
     {
-        cout << GREEN << "Please select one of the items.For example." << endl;
+        cout << GREEN << "Please select one of the items." << endl;
         cout << "1)view students\t2)view professors\t3)view courses\n4)create student\t5)create professor\n6)delete student\t7)delete professor\n8)restore student\t9)restore professsor\t0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
@@ -272,7 +272,7 @@ void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
             admin->restore_professor(headprof);
             break;
         default:
-        cerr << RED << "The number entered is incorrectPlease try again." << RESET << endl;
+        cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
         break;
         }
     }
