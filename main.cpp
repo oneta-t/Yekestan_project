@@ -23,8 +23,20 @@ int main()
         switch (num)
         {
         case 1:
+        {
+            string username, password;
+            cout << YELLOW << "Pleas enter your username:" << RESET << endl;
+            cin >> username;
+            cout << YELLOW << "Pleas enter your password:" << RESET << endl;
+            cin >> password;
+            if (username!="admin" || password!="123456")//کسی که میخواهید وارد بخش ادمین شود باید رمز را 123456و نام کاربری را adminوارد کند
+            {
+                cerr<<RED<<"Username or password is incorrect."<<RESET<<endl;
+                break;
+            }          
             Admin_page(headcourse, headstd, headprof);
-            break;
+        }
+        break;
         case 24:
             prof->Sign_in_P(headprof, headcourse);
             break;
