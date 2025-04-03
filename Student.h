@@ -26,7 +26,7 @@ public:
     void set_list_courses(Cours*courses);
     Student *get_nextS();
     void set_nextS(Student *nextS);
-    void Sign_in_S(Student *&headStudent);
+    void Sign_in_S(Student *&headStudent,Cours*courses);
     void Sign_up_S(Student *&headStudent);
     void Add_student(Student *&headStudent, Student *newstudent);
     void View_registered_courses();
@@ -34,7 +34,9 @@ public:
     void Course_registration(Cours *allcourses);
     void view_Task_Grades();
     void Answer_to_task(); 
+    void student_page(Cours *courses, Student *student);
+    void Grading_course();
+    //یدونه برا این باید بنویسی که بتونه به هر درس یه نمره خاص بده و فقط ادمین بتونه بنویسه اونو
 };
-
 
 #endif

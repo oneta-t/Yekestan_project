@@ -39,7 +39,7 @@ bool Student::get_isActiveS()
 
 void Student::set_isActiveS(bool x)
 {
-    isActiveS=x;
+    isActiveS = x;
 }
 
 Cours *Student::get_list_courses()
@@ -61,7 +61,48 @@ void Student::set_nextS(Student *nextS)
     next_S = nextS;
 }
 
-void Student::Sign_in_S(Student *&headStudent)
+void Student::student_page(Cours *courses, Student *student)
+{
+    cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
+    cout << endl;
+    while (1)
+    {
+        cout << GREEN << "Please select one of the items." << endl;
+        cout << "1)View registered courses this semester\t2)View available courses this semester\n3)Register for the desired course\t4)View task scores\n5)Answerthe tasks\t0)end" << RESET << endl; // برای نمره به درس هم بزار
+        cout << "Please enter the desired number: " << endl;
+        int num;
+        cin >> num;
+        Student *STD;
+        switch (num)
+        {
+        case 0:
+            return;
+        case 1:
+            STD->View_registered_courses();
+            break;
+        case 2:
+            STD->view_Available_Courses(courses);
+            break;
+        case 3:
+            STD->Course_registration(courses);
+            break;
+        case 4:
+            STD->view_Task_Grades();
+            break;
+        case 5:
+            STD->Answer_to_task();
+            break;
+        case 6:
+            /* code */
+            break;
+        default:
+            cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
+            break;
+        }
+    }
+}
+
+void Student::Sign_in_S(Student *&headStudent, Cours *courses)
 {
     string username, password;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
@@ -75,7 +116,7 @@ void Student::Sign_in_S(Student *&headStudent)
         if (temp->get_username() == username && temp->get_password() == password)
         {
             cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
-            // اینجا باید ببینیم که آیا فرد دانشجو هست یا استاد که بتونه وارد بخش کاربری خودش بره
+            this->student_page(courses, headStudent);
             return;
         }
         temp = temp->get_nextS();
