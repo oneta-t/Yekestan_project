@@ -18,6 +18,7 @@ private:
     int registeredS;
     float Score;
     float Average_Scores;
+    float std_give_scour;
     string Day;
     string Time;
     string Notice;
@@ -53,6 +54,8 @@ public:
     Cours* get_next_cours();
     void set_next_cours(Cours* newcours);   
     void Calculate_average();
+    float get_std_give_scour();
+    void set_std_give_scour(int grad);
 };
 
 #endif;

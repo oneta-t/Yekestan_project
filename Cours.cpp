@@ -15,6 +15,7 @@ Cours::Cours(string name, string college, string profname, string profamily, int
     professorname = profname;
     professorfamaiy = profamily;
     registeredS = 0;
+    std_give_scour=0;
     ID = ++nextId;
 }
 
@@ -175,4 +176,14 @@ void Cours::Calculate_average()
     {
         Average_Scores = sum / count;
     }
+}
+
+float Cours::get_std_give_scour()
+{
+    return std_give_scour;
+}
+
+void Cours::set_std_give_scour(int grad)
+{
+    std_give_scour=grad;
 }
