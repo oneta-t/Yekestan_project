@@ -72,28 +72,27 @@ void Student::student_page(Cours *courses, Student *student)
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
-        Student *STD;
         switch (num)
         {
         case 0:
             return;
         case 1:
-            STD->View_registered_courses();
+            this->View_registered_courses();
             break;
         case 2:
-            STD->view_Available_Courses(courses);
+            this->view_Available_Courses(courses);
             break;
         case 3:
-            STD->Course_registration(courses);
+            this->Course_registration(courses);
             break;
         case 4:
-            STD->view_Task_Grades();
+            this->view_Task_Grades();
             break;
         case 5:
-            STD->Answer_to_task();
+            this->Answer_to_task();
             break;
         case 6:
-            STD->Grading_course();
+            this->Grading_course();
             break;
         default:
             cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
@@ -181,7 +180,7 @@ void Student::View_registered_courses()
     cout << "\033[1;32m" << "List of courses you have taken this semester :" << RESET << endl;
     while (courses != nullptr)
     {
-        cout << GREEN << courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
+        cout << GREEN <<  "Id: " << courses->get_id() <<"      Name: "<<courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
         cout << endl;
         cout << "       Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "        Average_Scores: " << courses->get_average_Scores() << "        Score: " << courses->get_score();
         cout << endl;
@@ -399,10 +398,10 @@ void Student::Grading_course()
             cout << "Please enter the grad you want to add to this course(The score range is from 0 to 20): " << endl;
             int grad;
             cin >> grad;
-            while(grad > 20 || grad <0)
+            while (grad > 20 || grad < 0)
             {
-                cerr<<RED<<"The score you entered is not in the range of 0-20. Please try again:"<<RESET<<endl;
-                cin>>grad;
+                cerr << RED << "The score you entered is not in the range of 0-20. Please try again:" << RESET << endl;
+                cin >> grad;
             }
             courses->set_std_give_scour(grad);
             cout << MAGENTA << "✨ Your grad was successfully added to this course ✨" << RESET << endl;
@@ -410,5 +409,5 @@ void Student::Grading_course()
         }
         courses = courses->get_next_cours();
     }
-    cerr<<RED<<"No course with such ID was found."<<RESET<<endl;
+    cerr << RED << "No course with such ID was found." << RESET << endl;
 }
