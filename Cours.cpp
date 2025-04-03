@@ -2,14 +2,14 @@
 
 int Cours::nextId = 0;
 // Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
-Cours::Cours(string name, string college, string profname, string profamily, int units, int capacity, float score, float average, string day, string time)
+Cours::Cours(string name, string college, string profname, string profamily, int units, int capacity, string day, string time)
 {
     Coursename = name;
     College = college;
     Units = units;
     Capacity = capacity;
-    Score = score;
-    Average_Scores = average;
+    Score = 0;
+    this->Calculate_average();
     Day = day;
     Time = time;
     professorname = profname;

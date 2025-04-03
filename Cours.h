@@ -28,7 +28,7 @@ private:
     Cours *nextcours;
 public:
     //Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
-    Cours(string name,string college,string prof,string profamily,int units,int capacity,float score,float average,string day,string time);
+    Cours(string name,string college,string prof,string profamily,int units,int capacity,string day,string time);
     int get_id();
     void set_id(int id);
     string get_Coursename();
