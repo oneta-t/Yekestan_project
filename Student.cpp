@@ -380,3 +380,35 @@ void Student::Answer_to_task()
     cerr << RED << "There is no courrse with that ID." << RESET << endl;
     return;
 }
+
+void Student::Grading_course()
+{
+    cout << "Please enter the course ID you want to add grad for course: " << endl;
+    int num;
+    cin >> num;
+    Cours *courses = list_courses;
+    if (courses == nullptr)
+    {
+        cerr << RED << "You have not taken any courses this semester." << RESET << endl;
+        return;
+    }
+    while (courses != nullptr)
+    {
+        if (courses->get_id() == num)
+        {
+            cout << "Please enter the grad you want to add to this course(The score range is from 0 to 20): " << endl;
+            int grad;
+            cin >> grad;
+            while(grad > 20 || grad <0)
+            {
+                cerr<<RED<<"The score you entered is not in the range of 0-20. Please try again:"<<RESET<<endl;
+                cin>>grad;
+            }
+            courses->set_std_give_scour(grad);
+            cout << MAGENTA << "✨ Your grad was successfully added to this course ✨" << RESET << endl;
+            return;
+        }
+        courses = courses->get_next_cours();
+    }
+    cerr<<RED<<"No course with such ID was found."<<RESET<<endl;
+}
