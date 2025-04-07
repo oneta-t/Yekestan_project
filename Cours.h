@@ -1,5 +1,5 @@
 #ifndef COURS_H
-#define COURS.H
+#define COURS .H
 #include "Student.h"
 #include "Professor.h"
 #include "Task.h"
@@ -13,7 +13,7 @@ private:
     string College;
     string professorname;
     string professorfamaiy;
-    int Units;    
+    int Units;
     int Capacity;
     int registeredS;
     float Score;
@@ -21,14 +21,16 @@ private:
     float std_give_scour;
     string Day;
     string Time;
-    string Notice;
-    //Professor*professor;
-    Student*students;
-    Task* tasks;
+    vector<string> notices;
+    // string Notice;
+    // Professor*professor;
+    Student *students;
+    Task *tasks;
     Cours *nextcours;
+
 public:
-    //Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
-    Cours(string name,string college,string prof,string profamily,int units,int capacity,string day,string time);
+    // Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
+    Cours(string name, string college, string prof, string profamily, int units, int capacity, string day, string time);
     int get_id();
     void set_id(int id);
     string get_Coursename();
@@ -44,15 +46,16 @@ public:
     float get_score();
     void set_score(int score);
     float get_average_Scores();
-    string get_Notice();
-    void set_Notice(string notice);
-    void Addstudent(Student*newstudent);
-    void Addtask(Task*newtaske);
-    //Professor *get_Professor();
+    void add_Notice(string content);
+    const vector<string>& get_Notice();
+    void show_notices();
+    void Addstudent(Student *newstudent);
+    void Addtask(Task *newtaske);
+    // Professor *get_Professor();
     Student *get_Students();
     Task *get_Tasks();
-    Cours* get_next_cours();
-    void set_next_cours(Cours* newcours);   
+    Cours *get_next_cours();
+    void set_next_cours(Cours *newcours);
     void Calculate_average();
     float get_std_give_scour();
     void set_std_give_scour(int grad);

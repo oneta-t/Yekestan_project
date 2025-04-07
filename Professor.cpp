@@ -355,7 +355,7 @@ void Professor::Add_notification()
             string notice;
             cout << "Please enter the text of the notice:" << endl;
             getline(cin, notice);
-            cours->set_Notice(notice);
+            cours->add_Notice(notice);
             cout << MAGENTA << "✨ Announcement added successfully ✨" << RESET << endl;
             return;
         }

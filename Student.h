@@ -36,6 +36,7 @@ public:
     void Answer_to_task(); 
     void student_page(Cours *courses, Student *student);
     void Grading_course();
+    void view_notice();
 };
 
 #endif

@@ -68,7 +68,7 @@ void Student::student_page(Cours *courses, Student *student)
     while (1)
     {
         cout << GREEN << "Please select one of the items." << endl;
-        cout << "1)View registered courses this semester\t2)View available courses this semester\n3)Register for the desired course\t4)View task scores\n5)Answerthe tasks\t0)end" << RESET << endl;
+        cout << "1)View registered courses this semester\t2)View available courses this semester\n3)Register for the desired course\t4)View task scores\n5)Answerthe tasks\t6)Grad to course\n7)view notice of course\t0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
@@ -92,6 +92,9 @@ void Student::student_page(Cours *courses, Student *student)
             this->Answer_to_task();
             break;
         case 6:
+            this->Grading_course();
+            break;
+        case 7:
             this->Grading_course();
             break;
         default:
@@ -180,11 +183,10 @@ void Student::View_registered_courses()
     cout << "\033[1;32m" << "List of courses you have taken this semester :" << RESET << endl;
     while (courses != nullptr)
     {
-        cout << GREEN <<  "Id: " << courses->get_id() <<"      Name: "<<courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
+        cout << GREEN << "Id: " << courses->get_id() << "      Name: " << courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
         cout << endl;
         cout << "       Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "        Average_Scores: " << courses->get_average_Scores() << "        Score: " << courses->get_score();
         cout << endl;
-        cout << "Announcement: " << courses->get_Notice() << RESET << endl;
         courses = courses->get_next_cours();
         cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
     }
@@ -410,4 +412,34 @@ void Student::Grading_course()
         courses = courses->get_next_cours();
     }
     cerr << RED << "No course with such ID was found." << RESET << endl;
+}
+
+void Student::view_notice()
+{
+    cout << "Please enter the course ID you want to see notice : " << endl;
+    int num;
+    cin >> num;
+    Cours *courses = list_courses;
+    if (courses == nullptr)
+    {
+        cerr << RED << "You have not taken any courses this semester." << RESET << endl;
+        return;
+    }
+    while (courses != nullptr)
+    {
+        if (courses->get_id() == num)
+        {
+            vector<string>allnotice=courses->get_Notice();
+            cout <<"\033[1:34m"<< "Course announcements: " <<RESET<< endl;
+            for (int i = 0; i < allnotice.size(); ++i)
+            {
+                cout <<BLUE<< i + 1 << ")" << allnotice[i] << endl;
+                cout<<endl;
+                cout<< "-------------------" <<RESET<< endl;
+            }
+        }
+        courses = courses->get_next_cours();
+    }
+    cerr << RED << "No course with such ID was found." << RESET << endl;
+    
 }

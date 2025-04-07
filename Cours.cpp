@@ -1,4 +1,5 @@
 #include "Cours.h"
+#include <vector>
 
 int Cours::nextId = 0;
 // Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
@@ -15,7 +16,7 @@ Cours::Cours(string name, string college, string profname, string profamily, int
     professorname = profname;
     professorfamaiy = profamily;
     registeredS = 0;
-    std_give_scour=0;
+    std_give_scour = 0;
     ID = ++nextId;
 }
 
@@ -94,15 +95,27 @@ float Cours::get_average_Scores()
     return Average_Scores;
 }
 
-string Cours::get_Notice()
+void Cours::add_Notice(string content)
 {
-    return Notice;
+    notices.push_back(content);
 }
 
-void Cours::set_Notice(string notice)
+// void Cours::show_notices()
+// {
+//     cout <<"\033[1:34m"<< "Course announcements: " <<RESET<< endl;
+//     for (int i = 0; i < notices.size(); ++i)
+//     {
+//         cout <<BLUE<< i + 1 << ")" << notices[i] << endl;
+//         cout<<endl;
+//         cout<< "-------------------" <<RESET<< endl;
+//     }
+// }
+
+const vector<string>& Cours::get_Notice()
 {
-    Notice = notice;
+    return notices;
 }
+
 
 void Cours::Addstudent(Student *newstudent)
 {
@@ -185,5 +198,5 @@ float Cours::get_std_give_scour()
 
 void Cours::set_std_give_scour(int grad)
 {
-    std_give_scour=grad;
+    std_give_scour = grad;
 }
