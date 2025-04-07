@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 #include "json.hpp"
 using json = nlohmann::json;
 using namespace std;
