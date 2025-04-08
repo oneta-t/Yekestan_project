@@ -3,14 +3,14 @@
 
 int Cours::nextId = 0;
 // Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
-Cours::Cours(string name, string college, string profname, string profamily, int units, int capacity, string day, string time)
+Cours::Cours(Student*all,string name, string college, string profname, string profamily, int units, int capacity, string day, string time)
 {
     Coursename = name;
     College = college;
     Units = units;
     Capacity = capacity;
     Score = 0;
-    this->Calculate_average();
+    this->Calculate_average(all);
     Day = day;
     Time = time;
     professorname = profname;
@@ -111,23 +111,22 @@ void Cours::add_Notice(string content)
 //     }
 // }
 
-const vector<string>& Cours::get_Notice()
+const vector<string> &Cours::get_Notice()
 {
     return notices;
 }
 
-
-void Cours::Addstudent(Student *newstudent)
-{
-    if (Capacity < registeredS)
-    {
-        cerr << RED << "Course capacity is full! Cannot add more students" << RESET << endl;
-        return;
-    }
-    students->set_nextS(newstudent);
-    newstudent = students;
-    registeredS++;
-}
+// void Cours::Addstudent(Student *newstudent)
+// {
+//     if (Capacity < registeredS)
+//     {
+//         cerr << RED << "Course capacity is full! Cannot add more students" << RESET << endl;
+//         return;
+//     }
+//     students->set_nextS(newstudent);
+//     newstudent = students;
+//     registeredS++;
+// }
 
 void Cours::Addtask(Task *newtaske)
 {
@@ -140,10 +139,10 @@ void Cours::Addtask(Task *newtaske)
 //     return professor;
 // }
 
-Student *Cours::get_Students()
-{
-    return students;
-}
+// Student *Cours::get_Students()
+// {
+//     return students;
+// }
 
 Task *Cours::get_Tasks()
 {
@@ -160,28 +159,39 @@ void Cours::set_next_cours(Cours *newcours)
     nextcours = newcours;
 }
 
-void Cours::Calculate_average()
+void Cours::Calculate_average(Student *allSTD)
 {
     float sum;
     int count;
-    Student *temp = students;
+    Student *temp = allSTD;
     if (temp == nullptr)
+    {
+        cerr << RED << "The list of students is empty." << RESET << endl;
+        return;
+    }
+    if (studentIds.empty() == 0)
     {
         cerr << RED << "You are not any student for this course" << RESET << endl;
         return;
     }
     while (temp != nullptr)
     {
-        Cours *tempcours = temp->get_list_courses();
-        while (tempcours != nullptr)
+        for (int i = 0; i < count; i++)
         {
-            if (Coursename == tempcours->get_Coursename())
+            if (temp->get_id() == studentIds[i])
             {
-                sum += tempcours->get_score();
-                ++count;
-                temp = temp->get_nextS();
+                Cours *tempcours = temp->get_list_courses();
+                while (tempcours != nullptr)
+                {
+                    if (Coursename == tempcours->get_Coursename())
+                    {
+                        sum += tempcours->get_score();
+                        ++count;
+                        temp = temp->get_nextS();
+                    }
+                    tempcours = tempcours->get_next_cours();
+                }
             }
-            tempcours = tempcours->get_next_cours();
         }
         temp = temp->get_nextS();
     }
@@ -199,4 +209,20 @@ float Cours::get_std_give_scour()
 void Cours::set_std_give_scour(int grad)
 {
     std_give_scour = grad;
+}
+
+const vector<int> &Cours::get_stdID()
+{
+    return studentIds;
+}
+
+void Cours::Addstudent(int Id)
+{
+    if (Capacity < registeredS)
+    {
+        cerr << RED << "Course capacity is full! Cannot add more students" << RESET << endl;
+        return;
+    }
+    studentIds.push_back(Id);
+    registeredS++;
 }

@@ -24,13 +24,14 @@ private:
     vector<string> notices;
     // string Notice;
     // Professor*professor;
-    Student *students;
+    //Student *students;
+    vector<int> studentIds;
     Task *tasks;
     Cours *nextcours;
 
 public:
     // Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
-    Cours(string name, string college, string prof, string profamily, int units, int capacity, string day, string time);
+    Cours(Student*all,string name, string college, string prof, string profamily, int units, int capacity, string day, string time);
     int get_id();
     void set_id(int id);
     string get_Coursename();
@@ -48,15 +49,17 @@ public:
     float get_average_Scores();
     void add_Notice(string content);
     const vector<string>& get_Notice();
-    void show_notices();
-    void Addstudent(Student *newstudent);
+    //void show_notices();
+    //void Addstudent(Student *newstudent);
+    void Addstudent(int Id);
     void Addtask(Task *newtaske);
     // Professor *get_Professor();
-    Student *get_Students();
+    //Student *get_Students();
+    const vector<int>& get_stdID();
     Task *get_Tasks();
     Cours *get_next_cours();
     void set_next_cours(Cours *newcours);
-    void Calculate_average();
+    void Calculate_average(Student*allSTD);
     float get_std_give_scour();
     void set_std_give_scour(int grad);
 };
