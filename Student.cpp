@@ -278,7 +278,7 @@ void Student::Course_registration(Cours *allcourses)
         }
         registeredC = registeredC->get_next_cours();
     }
-    targetCourse->Addstudent(this);
+    targetCourse->Addstudent(this->get_id());
     targetCourse->set_next_cours(list_courses);
     list_courses = targetCourse;
     cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;

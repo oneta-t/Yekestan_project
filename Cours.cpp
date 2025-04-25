@@ -162,7 +162,7 @@ void Cours::set_next_cours(Cours *newcours)
 void Cours::Calculate_average(Student *allSTD)
 {
     float sum;
-    int count;
+    int count=0;
     Student *temp = allSTD;
     if (temp == nullptr)
     {
@@ -176,7 +176,7 @@ void Cours::Calculate_average(Student *allSTD)
     }
     while (temp != nullptr)
     {
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < studentIds.size(); i++)
         {
             if (temp->get_id() == studentIds[i])
             {

@@ -7,7 +7,7 @@
 class Cours
 {
 private:
-    int ID;
+    int ID;//بنظرم اینو constکنی بهترهوبعدا اگه پیاده سازی به مشکل نخورد کانست کن
     static int nextId;
     string Coursename;
     string College;
