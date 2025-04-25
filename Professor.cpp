@@ -109,27 +109,44 @@ void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor
     headProfessor = newprofessor;
 }
 
-void Professor::create_cours(string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
+void Professor::create_cours(Student *all, string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
 {
     // Cours *newcours = new Cours(name, college, units, capacity, score, average, day, time, this);
-    Cours *newcours = new Cours(name, college, profname, profamily, units, capacity, day, time);
+    Cours *newcours = new Cours(all, name, college, profname, profamily, units, capacity, day, time);
     newcours->set_next_cours(teachingCourse);
     teachingCourse = newcours;
 }
 
-void Professor::display_students(Cours *cours)
+void Professor::display_students(Cours *cours, Student *allStd)
 {
     if (cours->get_Professorname() != Firstname || cours->get_Professorfamaly() != Lastname)
     {
         cerr << RED << "This cours does not belong to you" << RESET << endl;
         return;
     }
-    Student *students = cours->get_Students();
-    cout << "\033[1;32m" << "List of students:" << RESET << endl;
-    while (students != nullptr)
+    vector<int> StdID = cours->get_stdID();
+    if (StdID.empty())
     {
-        cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
-        students = students->get_nextS();
+        cout << RED << "No students enrolled in this course yet." << RESET << endl;
+        return;
+    }
+    Student *temp = allStd;
+    if (temp == nullptr)
+    {
+        cerr << RED << "The list of students is empty." << RESET << endl;
+        return;
+    }
+    cout << "\033[1;32m" << "List of students:" << RESET << endl;
+    while (temp != nullptr)
+    {
+        for (int i = 0; i < StdID.size(); i++)
+        {
+            if (temp->get_id() == StdID[i])
+            {
+                cout << GREEN << temp->get_firstname() << " " << temp->get_lastname() << "\t" << "Student ID: " << temp->get_id() << RESET << endl;
+            }
+        }
+        temp = temp->get_nextS();
     }
 }
 
@@ -144,9 +161,10 @@ void Professor::create_task(Cours *cours, string nametaske, string description, 
     cours->Addtask(newtasks);
 }
 
-void Professor::score_task()
+void Professor::score_task(Student *all_student)
 {
     Cours *cours = teachingCourse;
+    Student *students = all_student;
     if (cours == nullptr)
     {
         cerr << RED << "You are not offering any courses this semester" << RESET << endl;
@@ -155,7 +173,7 @@ void Professor::score_task()
     cout << "\033[1;32m" << "List of courses you teach :" << RESET << endl;
     while (cours != nullptr)
     {
-        cout << GREEN << cours->get_Coursename() << RESET << endl;
+        cout << GREEN << "ID: " << cours->get_id() << ") " << cours->get_Coursename() << RESET << endl;
         cours = cours->get_next_cours();
     }
     cout << endl;
@@ -167,23 +185,35 @@ void Professor::score_task()
     {
         if (cours->get_id() == num)
         {
-            Student *students = cours->get_Students();
-            if (students == nullptr)
+            // Student *students = cours->get_Students();
+            vector<int> StdID = cours->get_stdID();
+            // if (students == nullptr)
+            // {
+            //     cout << RED << "There are no students for this course" << RESET << endl;
+            //     return;
+            // }
+            if (StdID.empty() || students == nullptr)
             {
-                cout << RED << "There are no students for this course" << RESET << endl;
+                cout << RED << "No students enrolled in this course yet." << RESET << endl;
                 return;
             }
             cout << "\033[1;32m" << "List of students :" << RESET << endl;
             while (students != nullptr)
             {
-                cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
+                for (int i = 0; i < StdID.size(); i++)
+                {
+                    if (students->get_id() == StdID[i])
+                    {
+                        cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
+                    }
+                }
                 students->get_nextS();
             }
             cout << endl;
             cout << "Please enter the ID of the student you want to add score to submission: " << endl;
             int id;
             cin >> id;
-            students = cours->get_Students();
+            Student *students = all_student;
             while (students != nullptr)
             {
                 if (students->get_id() == id)
@@ -194,24 +224,42 @@ void Professor::score_task()
                         if (STDcours->get_id() == cours->get_id())
                         {
                             Task *current = STDcours->get_Tasks();
+                            if (current == nullptr)
+                            {
+                                cerr << RED << "No tasks available for this course." << RESET << endl;
+                                return;
+                            }
                             int count = 0;
+                            cout << "\033[1;32m" << "List of tasks:" << RESET << endl;
                             while (current != nullptr)
                             {
                                 ++count;
                                 cout << "Task" << count << ") " << current->get_nametask() << endl;
-                                Submission *temp = current->get_Submissions();
-                                if (temp == nullptr)
-                                {
-                                    cout << RED << "No submissions found for this task" << RESET << endl;
-                                    return;
-                                }
-                                cout << "Answer: " << temp->get_answer() << RESET << endl;
-                                float grade;
-                                cout << "Pleas enter scour: " << endl;
-                                cin >> grade;
-                                temp->set_score(grade);
-                                cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
                                 current = current->get_next_task();
+                            }
+                            cout << endl;
+                            cout << "Pleas enter name of task you want to grad:" << endl;
+                            string nametask;
+                            cin >> nametask;
+                            current = STDcours->get_Tasks();
+                            while (current != nullptr)
+                            {
+                                if (current->get_nametask() == nametask)
+                                {
+                                    Submission *temp = current->get_Submissions();
+                                    if (temp == nullptr)
+                                    {
+                                        cout << RED << "No submissions found for this task" << RESET << endl;
+                                        return;
+                                    }
+                                    cout << "Answer: " << temp->get_answer() << RESET << endl;
+                                    float grade;
+                                    cout << "Pleas enter scour: " << endl;
+                                    cin >> grade;
+                                    temp->set_score(grade);
+                                    cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
+                                }
+                                current=current->get_next_task();
                             }
                         }
                         STDcours = STDcours->get_next_cours();

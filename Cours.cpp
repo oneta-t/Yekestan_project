@@ -226,3 +226,13 @@ void Cours::Addstudent(int Id)
     studentIds.push_back(Id);
     registeredS++;
 }
+
+const vector<int>& Cours::get_StudentIds() const
+{
+    return studentIds;
+}
+
+void Cours::set_StudentIds(const vector<int>&newstd)
+{
+    studentIds=newstd;
+}

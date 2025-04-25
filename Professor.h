@@ -24,10 +24,10 @@ public:
     void Sign_in_P(Professor *&headProfessor,Cours*courses);
     void Sign_up_P(Professor *&headProfessor);
     void Add_professor(Professor *&headProfessor, Professor *newprofessor);
-    void create_cours(string name,string profname,string profamily,string college,int units,int capacity,string day,string time);
-    void display_students(Cours*cours);
+    void create_cours(Student*all,string name,string profname,string profamily,string college,int units,int capacity,string day,string time);
+    void display_students(Cours*cours,Student*allStd);
     void create_task(Cours *cours,string nametaske, string description, string deadline);
-    void score_task();
+    void score_task(Student *all_student);
     void score_student();
     void Add_notification();
     Cours*get_teachingCourse();
