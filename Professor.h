@@ -28,7 +28,7 @@ public:
     void display_students(Cours*cours,Student*allStd);
     void create_task(Cours *cours,string nametaske, string description, string deadline);
     void score_task(Student *all_student);
-    void score_student();
+    void score_student(Student *all_student);
     void Add_notification();
     Cours*get_teachingCourse();
     void set_teachingCourse(Cours*courses);

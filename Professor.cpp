@@ -186,12 +186,12 @@ void Professor::score_task(Student *all_student)
         if (cours->get_id() == num)
         {
             // Student *students = cours->get_Students();
-            vector<int> StdID = cours->get_stdID();
             // if (students == nullptr)
             // {
             //     cout << RED << "There are no students for this course" << RESET << endl;
             //     return;
             // }
+            vector<int> StdID = cours->get_stdID();
             if (StdID.empty() || students == nullptr)
             {
                 cout << RED << "No students enrolled in this course yet." << RESET << endl;
@@ -311,9 +311,10 @@ void Professor::score_task(Student *all_student)
     // cerr << RED << "Invalid task selection" << RESET << endl;
 }
 
-void Professor::score_student()
+void Professor::score_student(Student *all_student)
 {
     Cours *cours = teachingCourse;
+    Student *students = all_student;
     if (cours == nullptr)
     {
         cerr << RED << "You are not offering any courses this semester" << RESET << endl;
@@ -334,23 +335,35 @@ void Professor::score_student()
     {
         if (cours->get_id() == num)
         {
-            Student *students = cours->get_Students();
-            if (students == nullptr)
+            vector<int> StdID = cours->get_stdID();
+            if (StdID.empty() || students == nullptr)
             {
-                cout << RED << "There are no students for this course" << RESET << endl;
+                cout << RED << "No students enrolled in this course yet." << RESET << endl;
                 return;
             }
+            // Student *students = cours->get_Students();
+            // if (students == nullptr)
+            // {
+            //     cout << RED << "There are no students for this course" << RESET << endl;
+            //     return;
+            // }
             cout << "\033[1;32m" << "List of students :" << RESET << endl;
             while (students != nullptr)
             {
-                cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
+                for (int i = 0; i < StdID.size(); i++)
+                {
+                    if (students->get_id() == StdID[i])
+                    {
+                        cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
+                    }
+                }
                 students->get_nextS();
             }
             cout << endl;
             cout << "Please enter the ID of the student you want to add score: " << endl;
             int id;
             cin >> id;
-            students = cours->get_Students();
+            Student *students = all_student;
             while (students != nullptr)
             {
                 if (students->get_id() == id)
