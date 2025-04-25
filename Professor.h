@@ -21,7 +21,7 @@ public:
     void set_isActiveP(bool x);
     Professor *get_nextP();
     void set_nextP(Professor *nextP);
-    void Sign_in_P(Professor *&headProfessor,Cours*courses);
+    void Sign_in_P(Professor *&headProfessor,Cours*courses,Student *all_student);
     void Sign_up_P(Professor *&headProfessor);
     void Add_professor(Professor *&headProfessor, Professor *newprofessor);
     void create_cours(Student*all,string name,string profname,string profamily,string college,int units,int capacity,string day,string time);
@@ -32,7 +32,7 @@ public:
     void Add_notification();
     Cours*get_teachingCourse();
     void set_teachingCourse(Cours*courses);
-    void professor_page(Professor *Prof,Cours*courses);
+    void professor_page(Professor *Prof,Cours*courses,Student *all_student);
     void view_courses();
     //یک متد هم باید بزاریم برا اینکه درسو بتونه ظرفیت براش تغییر بده
 

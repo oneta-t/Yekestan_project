@@ -62,7 +62,7 @@ public:
     void Calculate_average(Student*allSTD);
     float get_std_give_scour();
     void set_std_give_scour(int grad);
-    const vector<int>& get_StudentIds() const;
+    //const vector<int>& get_StudentIds() const;
     void set_StudentIds(const vector<int>&newstd);
 };
 

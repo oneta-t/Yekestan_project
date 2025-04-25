@@ -227,10 +227,10 @@ void Cours::Addstudent(int Id)
     registeredS++;
 }
 
-const vector<int>& Cours::get_StudentIds() const
-{
-    return studentIds;
-}
+// const vector<int>& Cours::get_StudentIds() const
+// {
+//     return studentIds;
+// }
 
 void Cours::set_StudentIds(const vector<int>&newstd)
 {

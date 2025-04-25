@@ -43,7 +43,7 @@ void Professor::set_nextP(Professor *nextP)
     next_P = nextP;
 }
 
-void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses)
+void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses,Student *all_student)
 {
     string username, password;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
@@ -57,7 +57,7 @@ void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses)
         if (temp->get_username() == username && temp->get_password() == password)
         {
             cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
-            this->professor_page(headProfessor, courses);
+            this->professor_page(headProfessor, courses,all_student);
             return;
         }
         temp = temp->get_nextP();
@@ -434,8 +434,9 @@ void Professor::set_teachingCourse(Cours *courses)
     teachingCourse = courses;
 }
 
-void Professor::professor_page(Professor *Prof, Cours *courses)
+void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_student)
 {
+    Student*students=all_student;
     cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
     cout << endl;
     while (1)
@@ -467,7 +468,7 @@ void Professor::professor_page(Professor *Prof, Cours *courses)
             cin >> units;
             cout << "Please specify the course capacity: " << endl;
             cin >> capacity;
-            this->create_cours(name, profname, profamily, college, units, capacity, day, time);
+            this->create_cours(students,name, profname, profamily, college, units, capacity, day, time);
             break;
         }
         case 2:
@@ -485,7 +486,7 @@ void Professor::professor_page(Professor *Prof, Cours *courses)
             {
                 if (current->get_id() == num)
                 {
-                    this->display_students(current);
+                    this->display_students(current,students);
                     break;
                 }
                 current = current->get_next_cours();
@@ -524,10 +525,10 @@ void Professor::professor_page(Professor *Prof, Cours *courses)
         }
         break;
         case 4:
-            this->score_task();
+            this->score_task(students);
             break;
         case 5:
-            this->score_student();
+            this->score_student(students);
             break;
         case 6:
             this->Add_notification();
