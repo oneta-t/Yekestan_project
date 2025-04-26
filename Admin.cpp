@@ -42,7 +42,7 @@ void Admin::view_all_professors(Professor *headProfessor)
     }
 }
 
-void Admin::view_all_courses(Cours *headCourse)
+void Admin::view_all_courses(Cours *headCourse, Student *allSTD)
 {
     Cours *courses = headCourse;
     if (courses == nullptr)
@@ -56,11 +56,66 @@ void Admin::view_all_courses(Cours *headCourse)
     {
         cout << GREEN << "Cours name: " << courses->get_Coursename() << "       Units: " << courses->get_units() << "        College: " << courses->get_College() << endl;
         cout << "Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "        Time: " << courses->get_day() << "-->" << courses->get_time() << endl;
-        courses->Calculate_average();
-        cout << "Average score of students: " << courses->get_average_Scores() << RESET << endl; // اینجا یه چیزی برا این میخوام که مثلادانشجو نمره بده و میانگینو نشون بده
+        courses->Calculate_average(allSTD);
+        cout << "Average score of students: " << courses->get_average_Scores() << RESET << endl;
         cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
+        while (1)
+        {
+            cout << "If you want to see the grade that students have given for this course, enter the number 1, otherwise enter the number 0" << endl;
+            int num;
+            cin >> num;
+            switch (num)
+            {
+            case 1:
+            {
+                cout << endl;
+                cout << MAGENTA << "Student Ratings for " << courses->get_Coursename() << ":" << RESET << endl;
+                const map<int, float> &ratings = courses->getAllRatings();
+                if (ratings.empty())
+                {
+                    cout << YELLOW << "No student ratings available for this course." << RESET << endl;
+                    return;
+                }
+                for (const auto &[studentId, rating] : ratings)
+                {
+                    Student *student = find_student_by_id(allSTD, studentId);
+                    if (student != nullptr)
+                    {
+                        cout << student->get_firstname() << " " << student->get_lastname() << "\t\t" << studentId << "\t\t" << rating << "/20.0" << endl;
+                    }
+                }
+                float sum = 0.0f;
+                for (const auto &[_, rating] : ratings)
+                {
+                    sum += rating;
+                }
+                float average = sum / ratings.size();
+                cout << "Average Rating: " << average << "/20.0" << endl;
+            }
+            break;
+            case 0:
+                break;
+            default:
+                cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
+                break;
+            }
+        }
         courses = courses->get_next_cours();
     }
+}
+
+Student *Admin::find_student_by_id(Student *head, int id) const
+{
+    Student *current = head;
+    while (current != nullptr)
+    {
+        if (current->get_id() == id)
+        {
+            return current;
+        }
+        current = current->get_nextS();
+    }
+    return nullptr;
 }
 
 void Admin::create_student(Student *&headStudent)
@@ -239,7 +294,7 @@ void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
-        Admin* admin;
+        Admin *admin;
         switch (num)
         {
         case 0:
@@ -251,7 +306,7 @@ void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
             admin->view_all_professors(headprof);
             break;
         case 3:
-            admin->view_all_courses(headcourse);
+            admin->view_all_courses(headcourse, headstd);
             break;
         case 4:
             admin->create_student(headstd);
@@ -272,8 +327,8 @@ void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
             admin->restore_professor(headprof);
             break;
         default:
-        cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
-        break;
+            cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
+            break;
         }
     }
 }

@@ -398,14 +398,14 @@ void Student::Grading_course()
         if (courses->get_id() == num)
         {
             cout << "Please enter the grad you want to add to this course(The score range is from 0 to 20): " << endl;
-            int grad;
+            float grad;
             cin >> grad;
             while (grad > 20 || grad < 0)
             {
                 cerr << RED << "The score you entered is not in the range of 0-20. Please try again:" << RESET << endl;
                 cin >> grad;
             }
-            courses->set_std_give_scour(grad);
+            courses->add_Student_rating(Id,grad);
             cout << MAGENTA << "✨ Your grad was successfully added to this course ✨" << RESET << endl;
             return;
         }

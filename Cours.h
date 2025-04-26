@@ -3,6 +3,7 @@
 #include "Student.h"
 #include "Professor.h"
 #include "Task.h"
+#include <map>
 
 class Cours
 {
@@ -18,7 +19,7 @@ private:
     int registeredS;
     float Score;
     float Average_Scores;
-    float std_give_scour;
+    std::map<int, float> studentRatings;
     string Day;
     string Time;
     vector<string> notices;
@@ -60,8 +61,9 @@ public:
     Cours *get_next_cours();
     void set_next_cours(Cours *newcours);
     void Calculate_average(Student*allSTD);
-    float get_std_give_scour();
-    void set_std_give_scour(int grad);
+    void add_Student_rating(int studentId, float rating);
+    float get_student_rating(int studentId) const;
+    const map<int, float> &Cours::getAllRatings() const;
     //const vector<int>& get_StudentIds() const;
     void set_StudentIds(const vector<int>&newstd);
 };

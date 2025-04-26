@@ -3,7 +3,7 @@
 
 int Cours::nextId = 0;
 // Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
-Cours::Cours(Student*all,string name, string college, string profname, string profamily, int units, int capacity, string day, string time)
+Cours::Cours(Student *all, string name, string college, string profname, string profamily, int units, int capacity, string day, string time)
 {
     Coursename = name;
     College = college;
@@ -16,7 +16,6 @@ Cours::Cours(Student*all,string name, string college, string profname, string pr
     professorname = profname;
     professorfamaiy = profamily;
     registeredS = 0;
-    std_give_scour = 0;
     ID = ++nextId;
 }
 
@@ -162,7 +161,7 @@ void Cours::set_next_cours(Cours *newcours)
 void Cours::Calculate_average(Student *allSTD)
 {
     float sum;
-    int count=0;
+    int count = 0;
     Student *temp = allSTD;
     if (temp == nullptr)
     {
@@ -201,14 +200,28 @@ void Cours::Calculate_average(Student *allSTD)
     }
 }
 
-float Cours::get_std_give_scour()
+void Cours::add_Student_rating(int studentId, float rating)
 {
-    return std_give_scour;
+    if (rating >= 0.0f && rating <= 20.0f)
+    {
+        studentRatings[studentId] = rating;
+    }
 }
 
-void Cours::set_std_give_scour(int grad)
+float Cours::get_student_rating(int studentId) const {
+    auto it = studentRatings.find(studentId);
+    
+    if (it != studentRatings.end()) {
+        return it->second; 
+    } 
+    else {
+        return -1.0f;
+    }
+}
+
+const map<int, float> &Cours::getAllRatings() const
 {
-    std_give_scour = grad;
+    return studentRatings;
 }
 
 const vector<int> &Cours::get_stdID()
@@ -232,7 +245,7 @@ void Cours::Addstudent(int Id)
 //     return studentIds;
 // }
 
-void Cours::set_StudentIds(const vector<int>&newstd)
+void Cours::set_StudentIds(const vector<int> &newstd)
 {
-    studentIds=newstd;
+    studentIds = newstd;
 }
