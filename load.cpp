@@ -1,339 +1,350 @@
 #include "load.h"
 
-Student *load_students_with_courses()
+Student *load_students()
 {
-    ifstream file("student.json");
+    ifstream file("students.json");
     if (!file.is_open())
     {
-        cerr << "Error opening file!" << endl;
+        cerr << "Error: Could not open students.json" << endl;
         return nullptr;
     }
+
     json j;
     file >> j;
     file.close();
+
     Student *head = nullptr;
     Student *tail = nullptr;
-    for (auto &student_data : j["students"])
+
+    for (const auto &student_json : j["students"])
     {
+        // ایجاد دانشجوی جدید
         Student *new_student = new Student(
-            student_data["username"],
-            student_data["password"],
-            student_data["firstname"],
-            student_data["lastname"],
-            student_data["major"],
-            student_data["id"]);
-        new_student->set_isActiveS(student_data["isActive"]);
+            student_json["username"],
+            student_json["password"],
+            student_json["firstname"],
+            student_json["lastname"],
+            student_json["major"],
+            student_json["id"]);
+        new_student->set_isActiveS(student_json["isActive"]);
 
-        for (auto &course_data : student_data["courses"])
+        // افزودن به لیست پیوندی
+        if (!head)
         {
-            Cours *new_course = new Cours(
-                course_data["name"],
-                course_data["college"],
-                course_data["professor"]["firstname"],
-                course_data["professor"]["lastname"],
-                course_data["units"],
-                course_data["capacity"],
-                course_data["score"],
-                course_data["average"],
-                course_data["time"]["day"],
-                course_data["time"]["hour"]);
-            new_course->set_id(course_data["id"]);
-            new_course->set_Notice(course_data["notice"]);
-
-            for (auto &task_data : course_data["tasks"])
-            {
-                Task *new_task = new Task(
-                    task_data["name"],
-                    task_data["description"],
-                    task_data["deadline"]);
-
-                for (auto &sub_data : task_data["submissions"])
-                {
-                    new_task->Add_Submissions(
-                        sub_data["student_name"],
-                        sub_data["student_id"],
-                        sub_data["answer"]);
-                    Submission *sub = new_task->get_Submissions();
-                    if (sub->get_id() == sub_data["student_id"])
-                    {
-                        sub->set_score(sub_data["score"]);
-                        break;
-                    }
-                }
-
-                new_course->Addtask(new_task);
-            }
-
-            new_course->set_next_cours(new_student->get_list_courses());
-            new_student->set_list_courses(new_course);
+            head = tail = new_student;
+        }
+        else
+        {
+            tail->set_nextS(new_student);
+            tail = new_student;
         }
 
-        if (!head)
-            head = new_student;
-        else
-            tail->set_nextS(new_student);
-        tail = new_student;
+        // بازیابی دروس دانشجو
+        Cours *prev_course = nullptr;
+        for (const auto &course_json : student_json["courses"])
+        {
+            Cours *new_course = new Cours(
+                nullptr, // دانشجویان بعداً اضافه می‌شوند
+                course_json["name"],
+                course_json["college"],
+                course_json["professor"]["firstname"],
+                course_json["professor"]["lastname"],
+                course_json["units"],
+                course_json["capacity"],
+                course_json["day"],
+                course_json["time"]);
+            new_course->set_id(course_json["id"]);
+            new_course->set_registeredS(course_json["registered"]);
+            new_course->set_score(course_json["score"]);
+            new_course->set_average_Scores(course_json["average"]);
+
+            // اضافه کردن اطلاعیه‌ها
+            for (const auto &notice : course_json["notices"])
+            {
+                new_course->add_Notice(notice);
+            }
+
+            // اضافه کردن تکالیف
+            for (const auto &task_json : course_json["tasks"])
+            {
+                Task *new_task = new Task(
+                    task_json["name"],
+                    task_json["description"],
+                    task_json["deadline"]);
+                new_course->Addtask(new_task);
+
+                // اضافه کردن ارسال‌ها
+                for (const auto &sub_json : task_json["submissions"])
+                {
+                    if (sub_json["student_id"] == new_student->get_id())
+                    {
+                        new_task->Add_Submissions(
+                            new_student->get_firstname() + " " + new_student->get_lastname(),
+                            sub_json["student_id"],
+                            sub_json["answer"]);
+                        Submission *sub = new_task->get_Submissions();
+                        sub->set_score(sub_json["score"]);
+                    }
+                }
+            }
+
+            // اتصال دروس به دانشجو
+            if (!new_student->get_list_courses())
+            {
+                new_student->set_list_courses(new_course);
+                prev_course = new_course;
+            }
+            else
+            {
+                prev_course->set_next_cours(new_course);
+                prev_course = new_course;
+            }
+        }
     }
+
     return head;
 }
-
-Professor *load_professors(Student *all_students)
+Professor *load_professors()
 {
-    ifstream file("professor.json");
+    ifstream file("professors.json");
     if (!file.is_open())
     {
-        cerr << "Error opening file!" << endl;
+        cerr << "Error: Could not open professors.json" << endl;
         return nullptr;
     }
+
     json j;
     file >> j;
     file.close();
+
     Professor *head = nullptr;
     Professor *tail = nullptr;
-    for (auto &prof_data : j["professors"])
+
+    for (const auto &professor_json : j["professors"])
     {
-        Professor *new_prof = new Professor(
-            prof_data["username"],
-            prof_data["password"],
-            prof_data["firstname"],
-            prof_data["lastname"],
-            prof_data["id"]);
-        new_prof->set_isActiveP(prof_data["isActive"]);
+        // ایجاد استاد جدید
+        Professor *new_professor = new Professor(
+            professor_json["username"],
+            professor_json["password"],
+            professor_json["firstname"],
+            professor_json["lastname"],
+            professor_json["id"]);
+        new_professor->set_isActiveP(professor_json["isActive"]);
 
-        for (auto &course_data : prof_data["courses"])
+        // افزودن به لیست پیوندی
+        if (!head)
         {
-            Cours *new_course = new Cours(
-                course_data["name"],
-                course_data["college"],
-                prof_data["firstname"],
-                prof_data["lastname"],
-                course_data["units"],
-                course_data["capacity"],
-                0,
-                0,
-                course_data["day"],
-                course_data["time"]);
-            new_course->set_id(course_data["id"]);
-            new_course->set_Notice(course_data["notice"]);
-
-            for (auto &student_data : course_data["students"])
-            {
-                Student *student = find_student_by_id(all_students, student_data["id"]);
-                if (student)
-                {
-                    new_course->Addstudent(student);
-                    // اضافه کردن درس به لیست درس‌های دانشجو
-                    new_course->set_next_cours(student->get_list_courses());
-                    student->set_list_courses(new_course);
-                }
-            }
-
-            // بارگذاری تمرین‌های این درس
-            for (auto &task_data : course_data["tasks"])
-            {
-                Task *new_task = new Task(
-                    task_data["name"],
-                    task_data["description"],
-                    task_data["deadline"]);
-
-                // بارگذاری پاسخ‌های این تمرین
-                for (auto &sub_data : task_data["submissions"])
-                {
-                    new_task->Add_Submissions(
-                        "", // نام دانشجو بعداً تنظیم می‌شود
-                        sub_data["student_id"],
-                        sub_data["answer"]);
-                    // تنظیم نمره
-                    Submission *sub = new_task->get_Submissions();
-                    if (sub->get_id() == sub_data["student_id"])
-                    {
-                        sub->set_score(sub_data["score"]);
-                        // پیدا کردن نام دانشجو
-                        Student *s = find_student_by_id(all_students, sub_data["student_id"]);
-                        if (s)
-                        {
-                            sub->set_student_name(s->get_firstname() + " " + s->get_lastname());
-                        }
-                        break;
-                    }
-                }
-
-                new_course->Addtask(new_task);
-            }
-
-            // اضافه کردن درس به لیست درس‌های استاد
-            new_course->set_next_cours(new_prof->get_teachingCourse());
-            new_prof->set_teachingCourse(new_course);
+            head = tail = new_professor;
+        }
+        else
+        {
+            tail->set_nextP(new_professor);
+            tail = new_professor;
         }
 
-        if (!head)
-            head = new_prof;
-        else
-            tail->set_nextP(new_prof);
-        tail = new_prof;
+        // بازیابی دروس استاد
+        Cours *prev_course = nullptr;
+        for (const auto &course_json : professor_json["courses"])
+        {
+            Cours *new_course = new Cours(
+                nullptr, // دانشجویان بعداً اضافه می‌شوند
+                course_json["name"],
+                course_json["college"],
+                professor_json["firstname"], // نام استاد از پروفایل استاد گرفته می‌شود
+                professor_json["lastname"],
+                course_json["units"],
+                course_json["capacity"],
+                course_json["day"],
+                course_json["time"]);
+            new_course->set_id(course_json["id"]);
+            new_course->set_registeredS(course_json["registered"]);
+            new_course->set_score(course_json["score"]);
+            new_course->set_average_Scores(course_json["average"]);
+
+            // اضافه کردن اطلاعیه‌ها
+            for (const auto &notice : course_json["notices"])
+            {
+                new_course->add_Notice(notice);
+            }
+
+            // اضافه کردن نمره‌های دانشجویان
+            for (const auto &[studentId, rating] : course_json["studentRatings"].items())
+            {
+                new_course->add_Student_rating(stoi(studentId), rating);
+            }
+
+            // اضافه کردن دانشجویان (فقط IDها)
+            for (const auto &student_json : course_json["students"])
+            {
+                new_course->Addstudent(student_json["id"]);
+            }
+
+            // اضافه کردن تکالیف
+            for (const auto &task_json : course_json["tasks"])
+            {
+                Task *new_task = new Task(
+                    task_json["name"],
+                    task_json["description"],
+                    task_json["deadline"]);
+                new_course->Addtask(new_task);
+
+                // اضافه کردن ارسال‌ها
+                for (const auto &sub_json : task_json["submissions"])
+                {
+                    new_task->Add_Submissions(
+                        sub_json["student_name"],
+                        sub_json["student_id"],
+                        sub_json["answer"]);
+                    Submission *sub = new_task->get_Submissions();
+                    while (sub != nullptr && sub->get_id() != sub_json["student_id"])
+                    {
+                        sub = sub->get_next_sub();
+                    }
+                    if (sub)
+                    {
+                        sub->set_score(sub_json["score"]);
+                    }
+                }
+            }
+
+            // اتصال دروس به استاد
+            if (!new_professor->get_teachingCourse())
+            {
+                new_professor->set_teachingCourse(new_course);
+                prev_course = new_course;
+            }
+            else
+            {
+                prev_course->set_next_cours(new_course);
+                prev_course = new_course;
+            }
+        }
     }
 
     return head;
 }
 
-Student *find_student_by_id(Student *head, int id)
+Cours *load_courses(Student *all_students, Professor *all_professors)
 {
-    Student *current = head;
-    while (current != nullptr)
-    {
-        if (current->get_id() == id)
-        {
-            return current;
-        }
-        current = current->get_nextS();
-    }
-    return nullptr;
-}
-
-Cours* load_courses()
-{
-    ifstream file("course.json");
+    ifstream file("courses.json");
     if (!file.is_open())
     {
-        cerr << "Error opening courses file!" << endl;
+        cerr << "Error: Could not open courses.json" << endl;
         return nullptr;
     }
 
     json j;
-    try
-    {
-        file >> j;
-    }
-    catch (const exception &e)
-    {
-        cerr << "JSON parsing error: " << e.what() << endl;
-        file.close();
-        return nullptr;
-    }
+    file >> j;
     file.close();
 
     Cours *head = nullptr;
     Cours *tail = nullptr;
-    unordered_map<int, Student *> student_map; // برای جلوگیری از ایجاد دانشجوهای تکراری
+    map<int, Cours *> course_map;
 
-    for (auto &course_data : j["courses"])
+    // ایجاد دروس
+    for (const auto &course_json : j["courses"])
     {
-        try
+        Cours *new_course = new Cours(
+            nullptr, // دانشجویان بعداً اضافه می‌شوند
+            course_json["name"],
+            course_json["college"],
+            course_json["professor"]["firstname"],
+            course_json["professor"]["lastname"],
+            course_json["units"],
+            course_json["capacity"],
+            course_json["day"],
+            course_json["time"]);
+        new_course->set_id(course_json["id"]);
+        new_course->set_registeredS(course_json["registered"]);
+        new_course->set_score(course_json["score"]);
+        new_course->set_average_Scores(course_json["average"]);
+
+        // اضافه کردن اطلاعیه‌ها
+        for (const auto &notice : course_json["notices"])
         {
-            // ایجاد درس جدید
-            Cours *new_course = new Cours(
-                course_data["name"],
-                course_data["college"],
-                course_data["professor"]["firstname"],
-                course_data["professor"]["lastname"],
-                course_data["units"],
-                course_data["capacity"],
-                course_data["score"],
-                course_data["average"],
-                course_data["day"],
-                course_data["time"]);
-            new_course->set_id(course_data["id"]);
-            new_course->set_registeredS(course_data["registered"]);
-            new_course->set_Notice(course_data["notice"]);
+            new_course->add_Notice(notice);
+        }
 
-            // بارگذاری دانشجوها با اطلاعات کامل
-            Student *last_student = nullptr;
-            for (auto &student_data : course_data["students"])
-            {
-                int student_id = student_data["id"];
+        // اضافه کردن نمره‌های دانشجویان
+        for (const auto &[student_id_str, rating] : course_json["studentRatings"].items())
+        {
+            int student_id = stoi(student_id_str);
+            new_course->add_Student_rating(student_id, rating);
+        }
 
-                // اگر دانشجو از قبل وجود ندارد، ایجاد می‌کنیم
-                if (student_map.find(student_id) == student_map.end())
-                {
-                    Student *new_student = new Student(
-                        student_data["username"],
-                        student_data["password"],
-                        student_data["firstname"],
-                        student_data["lastname"],
-                        student_data["major"],
-                        student_id);
-                    new_student->set_isActiveS(student_data["isActive"]);
-                    student_map[student_id] = new_student;
-                }
+        course_map[new_course->get_id()] = new_course;
 
-                // اضافه کردن دانشجو به درس
-                if (last_student == nullptr)
-                {
-                    new_course->set_Students(student_map[student_id]);
-                }
-                else
-                {
-                    last_student->set_nextS(student_map[student_id]);
-                }
-                last_student = student_map[student_id];
-
-                // برقراری رابطه دوطرفه (اضافه کردن درس به دانشجو)
-                new_course->set_next_cours(student_map[student_id]->get_list_courses());
-                student_map[student_id]->set_list_courses(new_course);
-            }
-
-            // بارگذاری تمرین‌ها و پاسخ‌ها (مشابه قبل)
-            Task *last_task = nullptr;
-            for (auto &task_data : course_data["tasks"])
-            {
-                Task *new_task = new Task(
-                    task_data["name"],
-                    task_data["description"],
-                    task_data["deadline"]);
-
-                // بارگذاری پاسخ‌ها
-                Submission *last_submission = nullptr;
-                for (auto &sub_data : task_data["submissions"])
-                {
-                    int student_id = sub_data["student_id"];
-                    if (student_map.find(student_id) != student_map.end())
-                    {
-                        Submission *new_sub = new Submission(
-                            student_id,
-                            student_map[student_id]->get_firstname() + " " +
-                                student_map[student_id]->get_lastname(),
-                            sub_data["answer"],
-                            sub_data["score"]);
-
-                        if (last_submission == nullptr)
-                        {
-                            new_task->set_Submissions(new_sub);
-                        }
-                        else
-                        {
-                            last_submission->set_next_sub(new_sub);
-                        }
-                        last_submission = new_sub;
-                    }
-                }
-
-                // اضافه کردن تمرین به درس
-                if (last_task == nullptr)
-                {
-                    new_course->set_Tasks(new_task);
-                }
-                else
-                {
-                    last_task->set_next_task(new_task);
-                }
-                last_task = new_task;
-            }
-
-            // اضافه کردن درس به لیست
-            if (head == nullptr)
-            {
-                head = new_course;
-            }
-            else
-            {
-                tail->set_next_cours(new_course);
-            }
+        if (!head)
+        {
+            head = tail = new_course;
+        }
+        else
+        {
+            tail->set_next_cours(new_course);
             tail = new_course;
         }
-        catch (const exception &e)
+    }
+
+    // برقراری ارتباط با دانشجویان و اساتید
+    for (const auto &course_json : j["courses"])
+    {
+        Cours *course = course_map[course_json["id"]];
+
+        // اضافه کردن دانشجویان
+        for (int student_id : course_json["students"])
         {
-            cerr << "Error loading course: " << e.what() << endl;
-            continue;
+            Student *current = all_students;
+            while (current != nullptr)
+            {
+                if (current->get_id() == student_id)
+                {
+                    course->Addstudent(student_id);
+                    break;
+                }
+                current = current->get_nextS();
+            }
+        }
+
+        // اضافه کردن تکالیف و ارسال‌ها
+        for (const auto &task_json : course_json["tasks"])
+        {
+            Task *new_task = new Task(
+                task_json["name"],
+                task_json["description"],
+                task_json["deadline"]);
+            course->Addtask(new_task);
+
+            for (const auto &sub_json : task_json["submissions"])
+            {
+                Student *student = nullptr;
+                Student *current = all_students;
+                while (current != nullptr)
+                {
+                    if (current->get_id() == sub_json["student_id"])
+                    {
+                        student = current;
+                        break;
+                    }
+                    current = current->get_nextS();
+                }
+
+                if (student)
+                {
+                    new_task->Add_Submissions(
+                        sub_json["student_name"],
+                        sub_json["student_id"],
+                        sub_json["answer"]);
+                    Submission *sub = new_task->get_Submissions();
+                    while (sub != nullptr && sub->get_id() != sub_json["student_id"])
+                    {
+                        sub = sub->get_next_sub();
+                    }
+                    if (sub)
+                    {
+                        sub->set_score(sub_json["score"]);
+                    }
+                }
+            }
         }
     }
 

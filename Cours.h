@@ -8,7 +8,7 @@
 class Cours
 {
 private:
-    int ID;//بنظرم اینو constکنی بهترهوبعدا اگه پیاده سازی به مشکل نخورد کانست کن
+    int ID; // بنظرم اینو constکنی بهترهوبعدا اگه پیاده سازی به مشکل نخورد کانست کن
     static int nextId;
     string Coursename;
     string College;
@@ -25,14 +25,14 @@ private:
     vector<string> notices;
     // string Notice;
     // Professor*professor;
-    //Student *students;
+    // Student *students;
     vector<int> studentIds;
     Task *tasks;
     Cours *nextcours;
 
 public:
     // Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
-    Cours(Student*all,string name, string college, string prof, string profamily, int units, int capacity, string day, string time);
+    Cours(Student *all, string name, string college, string prof, string profamily, int units, int capacity, string day, string time);
     int get_id();
     void set_id(int id);
     string get_Coursename();
@@ -48,24 +48,26 @@ public:
     float get_score();
     void set_score(int score);
     float get_average_Scores();
+    void set_average_Scores(int avrege_score);  
     void add_Notice(string content);
-    const vector<string>& get_Notice();
-    //void show_notices();
-    //void Addstudent(Student *newstudent);
+    const vector<string> &get_Notice();
+    // void show_notices();
+    // void Addstudent(Student *newstudent);
     void Addstudent(int Id);
     void Addtask(Task *newtaske);
     // Professor *get_Professor();
-    //Student *get_Students();
-    const vector<int>& get_stdID();
+    // Student *get_Students();
+    const vector<int> &get_stdID();
     Task *get_Tasks();
     Cours *get_next_cours();
     void set_next_cours(Cours *newcours);
-    void Calculate_average(Student*allSTD);
+    void Calculate_average(Student *allSTD);
+    void set_std_give_scour(int studentId, float rating);
     void add_Student_rating(int studentId, float rating);
     float get_student_rating(int studentId) const;
     const map<int, float> &Cours::getAllRatings() const;
-    //const vector<int>& get_StudentIds() const;
-    void set_StudentIds(const vector<int>&newstd);
+    // const vector<int>& get_StudentIds() const;
+    void set_StudentIds(const vector<int> &newstd);
 };
 
 #endif;

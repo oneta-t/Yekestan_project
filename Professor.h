@@ -34,8 +34,6 @@ public:
     void set_teachingCourse(Cours*courses);
     void professor_page(Professor *Prof,Cours*courses,Student *all_student);
     void view_courses();
-    //یک متد هم باید بزاریم برا اینکه درسو بتونه ظرفیت براش تغییر بده
-
 };
 
 #endif

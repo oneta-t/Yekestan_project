@@ -94,6 +94,11 @@ float Cours::get_average_Scores()
     return Average_Scores;
 }
 
+void Cours::set_average_Scores(int avrege_score)
+{
+    Average_Scores=avrege_score;
+}
+
 void Cours::add_Notice(string content)
 {
     notices.push_back(content);
@@ -200,6 +205,16 @@ void Cours::Calculate_average(Student *allSTD)
     }
 }
 
+void Cours::set_std_give_scour(int studentId, float rating)
+{
+    if (rating < 0.0f || rating > 20.0f)
+    {
+        cerr << RED << "Rating must be between 0.0 and 20.0" << RESET << endl;
+        return;
+    }
+    studentRatings[studentId] = rating;
+}
+
 void Cours::add_Student_rating(int studentId, float rating)
 {
     if (rating >= 0.0f && rating <= 20.0f)
@@ -208,13 +223,16 @@ void Cours::add_Student_rating(int studentId, float rating)
     }
 }
 
-float Cours::get_student_rating(int studentId) const {
+float Cours::get_student_rating(int studentId) const
+{
     auto it = studentRatings.find(studentId);
-    
-    if (it != studentRatings.end()) {
-        return it->second; 
-    } 
-    else {
+
+    if (it != studentRatings.end())
+    {
+        return it->second;
+    }
+    else
+    {
         return -1.0f;
     }
 }
