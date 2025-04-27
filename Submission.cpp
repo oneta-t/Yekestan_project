@@ -6,7 +6,7 @@ Submission::Submission(int id, string name, string answer, float score)
     Id = id;
     Answer = answer;
     Score = score;
-    // Next_sub=nullptr;
+    Next_sub=nullptr;
 }
 
 int Submission::get_id()
@@ -38,12 +38,12 @@ void Submission::set_score(float scour)
     Score = scour;
 }
 
-// Submission* Submission::get_next_sub()
-// {
-//     return Next_sub;
-// }
+Submission* Submission::get_next_sub()
+{
+    return Next_sub;
+}
 
-// void Submission::set_next_sub(Submission*next_submission)
-// {
-//     Next_sub=next_submission;
-// }
+void Submission::set_next_sub(Submission*next_submission)
+{
+    Next_sub=next_submission;
+}

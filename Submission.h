@@ -11,7 +11,7 @@ private:
     int Id;
     string Answer;
     float Score;
-    //Submission *Next_sub;
+    Submission *Next_sub;
 
 public:
     Submission(int id,string name,string answer,float score);
@@ -21,8 +21,8 @@ public:
     float get_score();
     void set_score(float scour);
     void set_student_name(string name);
-    // Submission* get_next_sub();
-    // void Submission::set_next_sub(Submission*next_submission);
+    Submission* get_next_sub();
+    void Submission::set_next_sub(Submission*next_submission);
 };
 
 #endif
