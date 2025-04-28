@@ -2,13 +2,48 @@
 #include "Cours.h"
 #include "Professor.h"
 #include "Admin.h"
+#include "save_load.h"
+
+void cleanUp(Student *&headStudent, Professor *&headProfessor, Cours *&headCourses)
+{
+    Student *tempStudent = headStudent;
+    while (tempStudent != nullptr)
+    {
+        Student *nextStudent = tempStudent->get_nextS();
+        delete tempStudent;
+        tempStudent = nextStudent;
+    }
+    headStudent = nullptr;
+    Professor *tempProfessor = headProfessor;
+    while (tempProfessor != nullptr)
+    {
+        Professor *nextProfessor = tempProfessor->get_nextP();
+        delete tempProfessor;
+        tempProfessor = nextProfessor;
+    }
+    headProfessor = nullptr;
+    Cours *tempCourse = headCourses;
+    while (tempCourse != nullptr)
+    {
+        Cours *nextCourse = tempCourse->get_next_cours();
+        delete tempCourse;
+        tempCourse = nextCourse;
+    }
+    headCourses = nullptr;
+}
 
 int main()
 {
-    Cours *headcourse = nullptr;
-    Student *headstd = nullptr;
-    Professor *headprof = nullptr;
+    Student *students = load_students();
+    Professor *professors = load_professors(students);
+    Cours *courses = load_courses(students);
 
+    if (courses != nullptr && students != nullptr && professors != nullptr)
+    {
+        cerr << RED << "Error: Failed to load data!" << RESET << endl;
+        return 0;
+    }
+    cout << endl;
     cout << MAGENTA << "✨ Welcome to the Yekestan program ✨" << RESET << endl;
     cout << endl;
     while (1)
@@ -18,8 +53,8 @@ int main()
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
-        Student *student;
-        Professor *prof;
+        Student *student = nullptr;
+        Professor *prof = nullptr;
         switch (num)
         {
         case 1:
@@ -29,32 +64,37 @@ int main()
             cin >> username;
             cout << YELLOW << "Pleas enter your password:" << RESET << endl;
             cin >> password;
-            if (username!="admin" || password!="123456")//کسی که میخواهید وارد بخش ادمین شود باید رمز را 123456و نام کاربری را adminوارد کند
+            if (username != "admin" || password != "123456") // کسی که میخواهید وارد بخش ادمین شود باید رمز را 123456و نام کاربری را adminوارد کند
             {
-                cerr<<RED<<"Username or password is incorrect."<<RESET<<endl;
+                cerr << RED << "Username or password is incorrect." << RESET << endl;
                 break;
-            }          
-            Admin_page(headcourse, headstd, headprof);
+            }
+            Admin_page(courses, students, professors);
         }
         break;
         case 24:
-            prof->Sign_in_P(headprof, headcourse);
+            prof->Sign_in_P(professors, courses, students);
             break;
         case 25:
-            prof->Sign_up_P(headprof);
+            prof->Sign_up_P(professors);
             break;
         case 34:
-            student->Sign_in_S(headstd, headcourse);
+            student->Sign_in_S(students, courses);
             break;
         case 35:
-            student->Sign_up_S(headstd);
+            student->Sign_up_S(students);
             break;
         default:
             cerr << RED << "The number entered is incorrectPlease try again." << RESET << endl;
             break;
         case 0:
-            return;
+            return 0;
         }
     }
+    save_students(students);
+    save_professors(professors);
+    save_courses(courses);
+    cleanUp(students, professors, courses);
+
     return 0;
 }

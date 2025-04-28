@@ -2,7 +2,6 @@
 #include <vector>
 
 int Cours::nextId = 0;
-// Cours::Cours(string name, string college, int units, int capacity, float score, float average, string day, string time, Professor *prof)
 Cours::Cours(Student *all, string name, string college, string profname, string profamily, int units, int capacity, string day, string time)
 {
     Coursename = name;
@@ -17,6 +16,17 @@ Cours::Cours(Student *all, string name, string college, string profname, string 
     professorfamaiy = profamily;
     registeredS = 0;
     ID = ++nextId;
+}
+
+Cours::~Cours()
+{
+    Task *tempTask = tasks;
+    while (tempTask != nullptr)
+    {
+        Task *nextTask = tempTask->get_next_task();
+        delete tempTask;
+        tempTask = nextTask;
+    }
 }
 
 int Cours::get_id()
@@ -84,7 +94,7 @@ float Cours::get_score()
     return Score;
 }
 
-void Cours::set_score(int score)
+void Cours::set_score(float score)
 {
     Score = score;
 }
@@ -94,9 +104,9 @@ float Cours::get_average_Scores()
     return Average_Scores;
 }
 
-void Cours::set_average_Scores(int avrege_score)
+void Cours::set_average_Scores(float avrege_score)
 {
-    Average_Scores=avrege_score;
+    Average_Scores = avrege_score;
 }
 
 void Cours::add_Notice(string content)
@@ -104,49 +114,16 @@ void Cours::add_Notice(string content)
     notices.push_back(content);
 }
 
-// void Cours::show_notices()
-// {
-//     cout <<"\033[1:34m"<< "Course announcements: " <<RESET<< endl;
-//     for (int i = 0; i < notices.size(); ++i)
-//     {
-//         cout <<BLUE<< i + 1 << ")" << notices[i] << endl;
-//         cout<<endl;
-//         cout<< "-------------------" <<RESET<< endl;
-//     }
-// }
-
 const vector<string> &Cours::get_Notice()
 {
     return notices;
 }
-
-// void Cours::Addstudent(Student *newstudent)
-// {
-//     if (Capacity < registeredS)
-//     {
-//         cerr << RED << "Course capacity is full! Cannot add more students" << RESET << endl;
-//         return;
-//     }
-//     students->set_nextS(newstudent);
-//     newstudent = students;
-//     registeredS++;
-// }
 
 void Cours::Addtask(Task *newtaske)
 {
     tasks->set_next_task(newtaske);
     newtaske = tasks;
 }
-
-// Professor *Cours::get_Professor()
-// {
-//     return professor;
-// }
-
-// Student *Cours::get_Students()
-// {
-//     return students;
-// }
 
 Task *Cours::get_Tasks()
 {
@@ -166,7 +143,7 @@ void Cours::set_next_cours(Cours *newcours)
 void Cours::Calculate_average(Student *allSTD)
 {
     float sum;
-    int count = 0;
+    float count = 0;
     Student *temp = allSTD;
     if (temp == nullptr)
     {
@@ -180,7 +157,7 @@ void Cours::Calculate_average(Student *allSTD)
     }
     while (temp != nullptr)
     {
-        for (int i = 0; i < studentIds.size(); i++)
+        for (size_t i = 0; i < studentIds.size(); i++)
         {
             if (temp->get_id() == studentIds[i])
             {
@@ -257,11 +234,6 @@ void Cours::Addstudent(int Id)
     studentIds.push_back(Id);
     registeredS++;
 }
-
-// const vector<int>& Cours::get_StudentIds() const
-// {
-//     return studentIds;
-// }
 
 void Cours::set_StudentIds(const vector<int> &newstd)
 {

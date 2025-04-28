@@ -1,7 +1,11 @@
-#ifndef STUDENT_H
-#define STUDENT_H
+#pragma once
 #include "User.h"
 #include "Cours.h"
+#include"Professor.h"
+#include "Task.h"
+#include "Submission.h"
+#include "save_load.h"
+class Cours;
 
 class Student : public User
 {
@@ -16,6 +20,7 @@ private:
 
 public:
     Student(string uname, string pwd, string name, string family, string major, int id);
+    ~Student();
     string get_firstname();
     string get_lastname();
     string get_major();
@@ -31,12 +36,10 @@ public:
     void Add_student(Student *&headStudent, Student *newstudent);
     void View_registered_courses();
     void view_Available_Courses(Cours* allcourses);
-    void Course_registration(Cours *allcourses);
+    void Course_registration(Cours *allcourses,Student*headStudent);
     void view_Task_Grades();
-    void Answer_to_task(); 
-    void student_page(Cours *courses, Student *student);
-    void Grading_course();
+    void Answer_to_task(Student*headStudent); 
+    void student_page(Cours *courses,Student*headStudent);
+    void Grading_course(Student*headStudent);
     void view_notice();
 };
-
-#endif

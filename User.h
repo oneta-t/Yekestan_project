@@ -1,5 +1,4 @@
-#ifndef USER_H
-#define USER_H
+#pragma once
 #define RESET "\033[0m"
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -11,8 +10,6 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include "json.hpp"
-using json = nlohmann::json;
 using namespace std;
 
 class User
@@ -26,6 +23,3 @@ public:
     string get_username();
     string get_password();
 };
-
-
-#endif

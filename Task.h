@@ -1,9 +1,10 @@
-#ifndef TASK_H
-#define TASK_H
+#pragma once
 #include "Student.h"
 #include "Professor.h"
 #include "Cours.h"
 #include "Submission.h"
+#include "save_load.h"
+class Submission;
 
 class Task
 {
@@ -16,6 +17,7 @@ private:
 
 public:
     Task(string name,string description,string deadline);
+    ~Task();
     string get_nametask();
     string get_description();
     string get_deadline();
@@ -24,5 +26,3 @@ public:
     Submission*get_Submissions();
     void Add_Submissions(string studentname,int Id,string answer);
 };
-
-#endif

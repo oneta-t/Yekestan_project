@@ -1,14 +1,17 @@
-#ifndef COURS_H
-#define COURS .H
+#pragma once
+#include "User.h"
 #include "Student.h"
 #include "Professor.h"
 #include "Task.h"
+#include "Submission.h"
+#include "save_load.h"
 #include <map>
+class Task;
 
 class Cours
 {
 private:
-    int ID; // بنظرم اینو constکنی بهترهوبعدا اگه پیاده سازی به مشکل نخورد کانست کن
+    int ID;
     static int nextId;
     string Coursename;
     string College;
@@ -23,16 +26,13 @@ private:
     string Day;
     string Time;
     vector<string> notices;
-    // string Notice;
-    // Professor*professor;
-    // Student *students;
     vector<int> studentIds;
     Task *tasks;
     Cours *nextcours;
 
 public:
-    // Cours(string name,string college,int units,int capacity,float score,float average,string day,string time,Professor*prof);
     Cours(Student *all, string name, string college, string prof, string profamily, int units, int capacity, string day, string time);
+    ~Cours();
     int get_id();
     void set_id(int id);
     string get_Coursename();
@@ -46,17 +46,13 @@ public:
     int get_registeredS();
     void set_registeredS(int regist);
     float get_score();
-    void set_score(int score);
+    void set_score(float score);
     float get_average_Scores();
-    void set_average_Scores(int avrege_score);  
+    void set_average_Scores(float avrege_score);
     void add_Notice(string content);
     const vector<string> &get_Notice();
-    // void show_notices();
-    // void Addstudent(Student *newstudent);
     void Addstudent(int Id);
     void Addtask(Task *newtaske);
-    // Professor *get_Professor();
-    // Student *get_Students();
     const vector<int> &get_stdID();
     Task *get_Tasks();
     Cours *get_next_cours();
@@ -65,9 +61,6 @@ public:
     void set_std_give_scour(int studentId, float rating);
     void add_Student_rating(int studentId, float rating);
     float get_student_rating(int studentId) const;
-    const map<int, float> &Cours::getAllRatings() const;
-    // const vector<int>& get_StudentIds() const;
+    const map<int, float> &getAllRatings() const;
     void set_StudentIds(const vector<int> &newstd);
 };
-
-#endif;

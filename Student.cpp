@@ -12,6 +12,19 @@ Student::Student(string uname, string pwd, string name, string family, string ma
     isActiveS = true;
 }
 
+Student::~Student()
+{
+    Cours* tempCours = list_courses;
+    while (tempCours != nullptr)
+    {
+        Cours* nextCours = tempCours->get_next_cours();
+        delete tempCours;
+        tempCours = nextCours;
+    }
+    next_S = nullptr;
+    list_courses = nullptr;
+}
+
 string Student::get_firstname()
 {
     return Firstname;
@@ -61,14 +74,14 @@ void Student::set_nextS(Student *nextS)
     next_S = nextS;
 }
 
-void Student::student_page(Cours *courses, Student *student)
+void Student::student_page(Cours *courses,Student*headStudent)
 {
     cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
     cout << endl;
     while (1)
     {
         cout << GREEN << "Please select one of the items." << endl;
-        cout << "1)View registered courses this semester\t2)View available courses this semester\n3)Register for the desired course\t4)View task scores\n5)Answerthe tasks\t6)Grad to course\n7)view notice of course\t0)end" << RESET << endl;
+        cout << "1)View registered courses this semester        2)View available courses this semester\n3)Register for the desired course        4)View task scores\n5)Answerthe tasks        6)Grad to course\n7)view notice of course        0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
@@ -83,20 +96,20 @@ void Student::student_page(Cours *courses, Student *student)
             this->view_Available_Courses(courses);
             break;
         case 3:
-            this->Course_registration(courses);
+            this->Course_registration(courses,headStudent);
             break;
         case 4:
             this->view_Task_Grades();
             break;
         case 5:
-            this->Answer_to_task();
+            this->Answer_to_task(headStudent);
             break;
         case 6:
-            this->Grading_course();
+            this->Grading_course(headStudent);
             break;
-        case 7:
-            this->Grading_course();
-            break;
+        // case 7:
+        //     this->Grading_course(headStudent);//اینجا باید اطلاعیه درس رو بتونی ببینی
+        //     break;
         default:
             cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
             break;
@@ -118,7 +131,7 @@ void Student::Sign_in_S(Student *&headStudent, Cours *courses)
         if (temp->get_username() == username && temp->get_password() == password)
         {
             cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
-            this->student_page(courses, headStudent);
+            this->student_page(courses,headStudent);
             return;
         }
         temp = temp->get_nextS();
@@ -163,6 +176,7 @@ void Student::Sign_up_S(Student *&headStudent)
 
     Student *newstudent = new Student(username, password1, firstname, lastname, major, id);
     Add_student(headStudent, newstudent);
+    save_students(headStudent);
     cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
 }
 
@@ -193,7 +207,7 @@ void Student::View_registered_courses()
     cout << endl;
 }
 
-void Student::view_Available_Courses(Cours *allcourses) // میشه اگه وقت کردم طوری پیاده سازی کنم که درسو انتخاب کنه از لیست و بعد اطلاعات و ... براش نمایان بشه
+void Student::view_Available_Courses(Cours *allcourses) 
 {
     string currentCollege = "";
     Cours *current = allcourses;
@@ -237,7 +251,7 @@ void Student::view_Available_Courses(Cours *allcourses) // میشه اگه وق�
     }
 }
 
-void Student::Course_registration(Cours *allcourses)
+void Student::Course_registration(Cours *allcourses,Student*headStudent)
 {
     cout << "Please enter the course ID you want to add to your course list: " << endl;
     int num;
@@ -281,6 +295,7 @@ void Student::Course_registration(Cours *allcourses)
     targetCourse->Addstudent(this->get_id());
     targetCourse->set_next_cours(list_courses);
     list_courses = targetCourse;
+    save_students(headStudent);
     cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
 }
 
@@ -325,7 +340,7 @@ void Student::view_Task_Grades()
     }
 }
 
-void Student::Answer_to_task()
+void Student::Answer_to_task(Student*headStudent)
 {
     cout << "Please enter the course ID you want to add submission: " << endl;
     int num;
@@ -368,6 +383,7 @@ void Student::Answer_to_task()
                     string answer;
                     getline(cin, answer);
                     tasks->Add_Submissions(this->Firstname, this->Id, answer);
+                    save_students(headStudent);
                     cout << MAGENTA << "✨ Your answer was successfully added ✨" << RESET << endl;
                     return;
                 }
@@ -382,7 +398,7 @@ void Student::Answer_to_task()
     return;
 }
 
-void Student::Grading_course()
+void Student::Grading_course(Student*headStudent)
 {
     cout << "Please enter the course ID you want to add grad for course: " << endl;
     int num;
@@ -406,6 +422,7 @@ void Student::Grading_course()
                 cin >> grad;
             }
             courses->add_Student_rating(Id,grad);
+            save_students(headStudent);
             cout << MAGENTA << "✨ Your grad was successfully added to this course ✨" << RESET << endl;
             return;
         }
@@ -431,7 +448,7 @@ void Student::view_notice()
         {
             vector<string>allnotice=courses->get_Notice();
             cout <<"\033[1:34m"<< "Course announcements: " <<RESET<< endl;
-            for (int i = 0; i < allnotice.size(); ++i)
+            for (size_t i = 0; i < allnotice.size(); ++i)
             {
                 cout <<BLUE<< i + 1 << ")" << allnotice[i] << endl;
                 cout<<endl;
@@ -441,5 +458,4 @@ void Student::view_notice()
         courses = courses->get_next_cours();
     }
     cerr << RED << "No course with such ID was found." << RESET << endl;
-    
 }

@@ -9,6 +9,16 @@ Task::Task(string name,string description, string deadline)
     next_t = nullptr;
 }
 
+Task::~Task() {
+    Submission* tempSub = submission;
+    while (tempSub != nullptr) {
+        Submission* nextSub = tempSub->get_next_sub();
+        delete tempSub;
+        tempSub = nextSub;
+    }
+}
+
+
 string Task::get_nametask()
 {
     return Name;
@@ -39,11 +49,15 @@ Submission *Task::get_Submissions()
     return submission;
 }
 
-void Task::Add_Submissions(string studentname,int id,string answer)
+void Task::Add_Submissions(string studentname, int id, string answer)
 {
-    if (submission!=nullptr)
-    {
-        delete submission;
+    if (submission == nullptr) {
+        submission = new Submission(id, studentname, answer, 0.0);
+    } else {
+        Submission* temp = submission;
+        while (temp->get_next_sub() != nullptr) {
+            temp = temp->get_next_sub();
+        }
+        temp->set_next_sub(new Submission(id, studentname, answer, 0.0));
     }
-    submission=new Submission(id,studentname,answer,0.0);
 }

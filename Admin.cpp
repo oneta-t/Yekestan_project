@@ -89,7 +89,7 @@ void Admin::view_all_courses(Cours *headCourse, Student *allSTD)
                 {
                     sum += rating;
                 }
-                float average = sum / ratings.size();
+                float average = sum / static_cast<float>(ratings.size());
                 cout << "Average Rating: " << average << "/20.0" << endl;
             }
             break;
@@ -294,7 +294,7 @@ void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
-        Admin *admin;
+        Admin *admin=nullptr;
         switch (num)
         {
         case 0:

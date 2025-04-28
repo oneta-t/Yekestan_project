@@ -1,8 +1,8 @@
-#ifndef SUBMISSION_H
-#define SUBMISSION_H
+#pragma once
 #include "Student.h"
 #include "Professor.h"
 #include "Cours.h"
+#include "save_load.h"
 
 class Submission
 {
@@ -22,7 +22,5 @@ public:
     void set_score(float scour);
     void set_student_name(string name);
     Submission* get_next_sub();
-    void Submission::set_next_sub(Submission*next_submission);
+    void set_next_sub(Submission*next_submission);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef ADMIN_H
-#define ADMIN_H
+#pragma once
 #include "User.h"
 #include "Student.h"
 #include "Professor.h"
@@ -19,7 +18,4 @@ public:
     void restore_professor(Professor *headProfessor);
     Student *find_student_by_id(Student *head, int id) const;
 };
-
 void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof);
-
-#endif

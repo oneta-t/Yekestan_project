@@ -4,8 +4,20 @@ Professor::Professor(string uname, string pwd, string name, string family, int i
 {
     Firstname = name;
     Lastname = family;
+    Id = id;
     next_P = nullptr;
     teachingCourse = nullptr;
+}
+
+Professor::~Professor()
+{
+    Cours *tempCours = teachingCourse;
+    while (tempCours != nullptr)
+    {
+        Cours *nextCours = tempCours->get_next_cours();
+        delete tempCours;
+        tempCours = nextCours;
+    }
 }
 
 string Professor::get_firstname()
@@ -43,7 +55,7 @@ void Professor::set_nextP(Professor *nextP)
     next_P = nextP;
 }
 
-void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses,Student *all_student)
+void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses, Student *all_student)
 {
     string username, password;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
@@ -57,7 +69,7 @@ void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses,Student *all
         if (temp->get_username() == username && temp->get_password() == password)
         {
             cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
-            this->professor_page(headProfessor, courses,all_student);
+            this->professor_page(courses, all_student, headProfessor);
             return;
         }
         temp = temp->get_nextP();
@@ -97,9 +109,9 @@ void Professor::Sign_up_P(Professor *&headProfessor)
     }
     cout << YELLOW << "Pleas enter your Id:" << RESET << endl;
     cin >> id;
-
     Professor *newprofessor = new Professor(username, password1, firstname, lastname, id);
     Add_professor(headProfessor, newprofessor);
+    save_professors(headProfessor);
     cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
 }
 
@@ -109,12 +121,16 @@ void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor
     headProfessor = newprofessor;
 }
 
-void Professor::create_cours(Student *all, string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
+void Professor::create_cours(Cours *headCourses, Professor *headProfessor, Student *allS, string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
 {
-    // Cours *newcours = new Cours(name, college, units, capacity, score, average, day, time, this);
-    Cours *newcours = new Cours(all, name, college, profname, profamily, units, capacity, day, time);
-    newcours->set_next_cours(teachingCourse);
-    teachingCourse = newcours;
+    Cours *newcours1 = new Cours(allS, name, college, profname, profamily, units, capacity, day, time);
+    newcours1->set_next_cours(teachingCourse);
+    teachingCourse = newcours1;
+    Cours *newcours2 = new Cours(allS, name, college, profname, profamily, units, capacity, day, time);
+    newcours2->set_next_cours(headCourses);
+    headCourses = newcours2;
+    save_professors(headProfessor);
+    save_courses(headCourses);
 }
 
 void Professor::display_students(Cours *cours, Student *allStd)
@@ -139,7 +155,7 @@ void Professor::display_students(Cours *cours, Student *allStd)
     cout << "\033[1;32m" << "List of students:" << RESET << endl;
     while (temp != nullptr)
     {
-        for (int i = 0; i < StdID.size(); i++)
+        for (size_t i = 0; i < StdID.size(); i++)
         {
             if (temp->get_id() == StdID[i])
             {
@@ -150,7 +166,7 @@ void Professor::display_students(Cours *cours, Student *allStd)
     }
 }
 
-void Professor::create_task(Cours *cours, string nametaske, string description, string deadline)
+void Professor::create_task(Cours *headcours, Cours *cours, string nametaske, string description, string deadline)
 {
     if (cours->get_Professorname() != Firstname || cours->get_Professorfamaly() != Lastname)
     {
@@ -159,6 +175,7 @@ void Professor::create_task(Cours *cours, string nametaske, string description, 
     }
     Task *newtasks = new Task(nametaske, description, deadline);
     cours->Addtask(newtasks);
+    save_courses(headcours);
 }
 
 void Professor::score_task(Student *all_student)
@@ -185,12 +202,6 @@ void Professor::score_task(Student *all_student)
     {
         if (cours->get_id() == num)
         {
-            // Student *students = cours->get_Students();
-            // if (students == nullptr)
-            // {
-            //     cout << RED << "There are no students for this course" << RESET << endl;
-            //     return;
-            // }
             vector<int> StdID = cours->get_stdID();
             if (StdID.empty() || students == nullptr)
             {
@@ -200,7 +211,7 @@ void Professor::score_task(Student *all_student)
             cout << "\033[1;32m" << "List of students :" << RESET << endl;
             while (students != nullptr)
             {
-                for (int i = 0; i < StdID.size(); i++)
+                for (size_t i = 0; i < StdID.size(); i++)
                 {
                     if (students->get_id() == StdID[i])
                     {
@@ -213,7 +224,7 @@ void Professor::score_task(Student *all_student)
             cout << "Please enter the ID of the student you want to add score to submission: " << endl;
             int id;
             cin >> id;
-            Student *students = all_student;
+            students = all_student;
             while (students != nullptr)
             {
                 if (students->get_id() == id)
@@ -257,58 +268,22 @@ void Professor::score_task(Student *all_student)
                                     cout << "Pleas enter scour: " << endl;
                                     cin >> grade;
                                     temp->set_score(grade);
+                                    save_students(all_student);
                                     cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
                                 }
-                                current=current->get_next_task();
+                                current = current->get_next_task();
                             }
                         }
                         STDcours = STDcours->get_next_cours();
                     }
                     return;
                 }
-                students->get_nextS();
+                students = students->get_nextS();
             }
             return;
         }
         cours = cours->get_next_cours();
     }
-
-    // Task *current = teachingCourse->get_Tasks();
-    // cout << "\033[1;32m" << "List of tasks:" << RESET << endl;
-    // while (current != nullptr)
-    // {
-    //     cout << GREEN << current->get_nametask() << "\t" << current->get_deadline() << endl;
-    //     cout << current->get_description() << RESET << endl;
-    //     current = current->get_next_task();
-    //     cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
-    // }
-    // cout << endl;
-    // cout << "Pleas enter name of task you want to grad:" << endl;
-    // string nametask;
-    // cin >> nametask;
-    // current = teachingCourse->get_Tasks();
-    // while (current != nullptr)
-    // {
-    //     if (current->get_nametask() == nametask)
-    //     {
-    //         Submission *temp = current->get_Submissions();
-    //         if (temp == nullptr)
-    //         {
-    //             cout << RED << "No submissions found for this task" << RESET << endl;
-    //             return;
-    //         }
-    //         cout << BLUE << temp->get_student_name() << "\t" << "Studeny ID:" << temp->get_id() << endl;
-    //         cout << "Answer: " << temp->get_answer() << RESET << endl;
-    //         float grade;
-    //         cout << "Pleas enter scour: " << endl;
-    //         cin >> grade;
-    //         temp->set_score(grade);
-    //         cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
-    //         return;
-    //     }
-    //     current = current->get_next_task();
-    // }
-    // cerr << RED << "Invalid task selection" << RESET << endl;
 }
 
 void Professor::score_student(Student *all_student)
@@ -341,29 +316,23 @@ void Professor::score_student(Student *all_student)
                 cout << RED << "No students enrolled in this course yet." << RESET << endl;
                 return;
             }
-            // Student *students = cours->get_Students();
-            // if (students == nullptr)
-            // {
-            //     cout << RED << "There are no students for this course" << RESET << endl;
-            //     return;
-            // }
             cout << "\033[1;32m" << "List of students :" << RESET << endl;
             while (students != nullptr)
             {
-                for (int i = 0; i < StdID.size(); i++)
+                for (size_t i = 0; i < StdID.size(); i++)
                 {
                     if (students->get_id() == StdID[i])
                     {
                         cout << GREEN << students->get_firstname() << " " << students->get_lastname() << "\t" << "Student ID: " << students->get_id() << RESET << endl;
                     }
                 }
-                students->get_nextS();
+                students = students->get_nextS();
             }
             cout << endl;
             cout << "Please enter the ID of the student you want to add score: " << endl;
             int id;
             cin >> id;
-            Student *students = all_student;
+            students = all_student;
             while (students != nullptr)
             {
                 if (students->get_id() == id)
@@ -377,20 +346,21 @@ void Professor::score_student(Student *all_student)
                         if (list_courses == cours)
                         {
                             list_courses->set_score(grade);
+                            save_students(all_student);
                             cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
                             return;
                         }
                         list_courses = list_courses->get_next_cours();
                     }
                 }
-                students->get_nextS();
+                students = students->get_nextS();
             }
         }
         cours = cours->get_next_cours();
     }
 }
 
-void Professor::Add_notification()
+void Professor::Add_notification(Professor *headprof, Cours *headcours)
 {
     Cours *cours = teachingCourse;
     if (cours == nullptr)
@@ -406,17 +376,19 @@ void Professor::Add_notification()
     }
     cout << endl;
     cout << "Please enter the Id of the course you want add notice: " << endl;
-    int Id;
-    cin >> Id;
+    int id;
+    cin >> id;
     cours = teachingCourse;
     while (cours != nullptr)
     {
-        if (cours->get_id() == Id)
+        if (cours->get_id() == id)
         {
             string notice;
             cout << "Please enter the text of the notice:" << endl;
             getline(cin, notice);
             cours->add_Notice(notice);
+            save_courses(headcours);
+            save_professors(headprof);
             cout << MAGENTA << "✨ Announcement added successfully ✨" << RESET << endl;
             return;
         }
@@ -434,9 +406,9 @@ void Professor::set_teachingCourse(Cours *courses)
     teachingCourse = courses;
 }
 
-void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_student)
+void Professor::professor_page(Cours *courses, Student *all_student, Professor *headProfessor)
 {
-    Student*students=all_student;
+    Student *students = all_student;
     cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
     cout << endl;
     while (1)
@@ -468,14 +440,14 @@ void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_stud
             cin >> units;
             cout << "Please specify the course capacity: " << endl;
             cin >> capacity;
-            this->create_cours(students,name, profname, profamily, college, units, capacity, day, time);
+            this->create_cours(courses, headProfessor, students, name, profname, profamily, college, units, capacity, day, time);
             break;
         }
         case 2:
         {
             cout << "Please enter the course ID for which you want to see the students: " << endl;
-            int num;
-            cin >> num;
+            int num1;
+            cin >> num1;
             Cours *current = courses;
             if (current == nullptr)
             {
@@ -484,9 +456,9 @@ void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_stud
             }
             while (current != nullptr)
             {
-                if (current->get_id() == num)
+                if (current->get_id() == num1)
                 {
-                    this->display_students(current,students);
+                    this->display_students(current, students);
                     break;
                 }
                 current = current->get_next_cours();
@@ -497,8 +469,8 @@ void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_stud
         case 3:
         {
             cout << "Please enter the course ID for which you want to see the students: " << endl;
-            int num;
-            cin >> num;
+            int num2;
+            cin >> num2;
             Cours *current = courses;
             if (current == nullptr)
             {
@@ -507,7 +479,7 @@ void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_stud
             }
             while (current != nullptr)
             {
-                if (current->get_id() == num)
+                if (current->get_id() == num2)
                 {
                     cout << "Please enter the task name: " << endl;
                     string nametaske, description, deadline;
@@ -516,7 +488,7 @@ void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_stud
                     getline(cin, description);
                     cout << "Please specify the deadline: " << endl;
                     getline(cin, deadline);
-                    this->create_task(current, nametaske, description, deadline);
+                    this->create_task(courses, current, nametaske, description, deadline);
                     break;
                 }
                 current = current->get_next_cours();
@@ -531,7 +503,7 @@ void Professor::professor_page(Professor *Prof, Cours *courses,Student *all_stud
             this->score_student(students);
             break;
         case 6:
-            this->Add_notification();
+            this->Add_notification(headProfessor, courses);
             break;
         case 7:
             this->view_courses();
