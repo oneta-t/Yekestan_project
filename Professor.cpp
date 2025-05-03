@@ -7,6 +7,7 @@ Professor::Professor(string uname, string pwd, string name, string family, int i
     Id = id;
     next_P = nullptr;
     teachingCourse = nullptr;
+    isActiveP = true;
 }
 
 Professor::~Professor()
@@ -55,7 +56,7 @@ void Professor::set_nextP(Professor *nextP)
     next_P = nextP;
 }
 
-void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses, Student *all_student)
+void Professor::Sign_in_P(Professor *&headProfessor, Cours *&courses, Student *&all_student)
 {
     string username, password;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
@@ -68,7 +69,8 @@ void Professor::Sign_in_P(Professor *&headProfessor, Cours *courses, Student *al
     {
         if (temp->get_username() == username && temp->get_password() == password)
         {
-            cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
+            cout << endl;
+            cout << MAGENTA << "*** Login was successful ***" << RESET << endl;
             this->professor_page(courses, all_student, headProfessor);
             return;
         }
@@ -112,7 +114,7 @@ void Professor::Sign_up_P(Professor *&headProfessor)
     Professor *newprofessor = new Professor(username, password1, firstname, lastname, id);
     Add_professor(headProfessor, newprofessor);
     save_professors(headProfessor);
-    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+    cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
 void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor)
@@ -121,11 +123,12 @@ void Professor::Add_professor(Professor *&headProfessor, Professor *newprofessor
     headProfessor = newprofessor;
 }
 
-void Professor::create_cours(Cours *headCourses, Professor *headProfessor, Student *allS, string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
+void Professor::create_cours(Cours *&headCourses, Professor *&headProfessor, Student *&allS, string name, string profname, string profamily, string college, int units, int capacity, string day, string time) // اینجا خروجی رو بعدا اگه به مشکل خورد تغییر میدم
 {
     Cours *newcours1 = new Cours(allS, name, college, profname, profamily, units, capacity, day, time);
     newcours1->set_next_cours(teachingCourse);
     teachingCourse = newcours1;
+
     Cours *newcours2 = new Cours(allS, name, college, profname, profamily, units, capacity, day, time);
     newcours2->set_next_cours(headCourses);
     headCourses = newcours2;
@@ -166,7 +169,7 @@ void Professor::display_students(Cours *cours, Student *allStd)
     }
 }
 
-void Professor::create_task(Cours *headcours, Cours *cours, string nametaske, string description, string deadline)
+void Professor::create_task(Cours *&headcours, Cours *cours, string nametaske, string description, string deadline)
 {
     if (cours->get_Professorname() != Firstname || cours->get_Professorfamaly() != Lastname)
     {
@@ -178,7 +181,7 @@ void Professor::create_task(Cours *headcours, Cours *cours, string nametaske, st
     save_courses(headcours);
 }
 
-void Professor::score_task(Student *all_student)
+void Professor::score_task(Student *&all_student)
 {
     Cours *cours = teachingCourse;
     Student *students = all_student;
@@ -269,7 +272,7 @@ void Professor::score_task(Student *all_student)
                                     cin >> grade;
                                     temp->set_score(grade);
                                     save_students(all_student);
-                                    cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
+                                    cout << MAGENTA << "*** Grading completed successfully ***" << RESET << endl;
                                 }
                                 current = current->get_next_task();
                             }
@@ -286,7 +289,7 @@ void Professor::score_task(Student *all_student)
     }
 }
 
-void Professor::score_student(Student *all_student)
+void Professor::score_student(Student *&all_student)
 {
     Cours *cours = teachingCourse;
     Student *students = all_student;
@@ -347,7 +350,7 @@ void Professor::score_student(Student *all_student)
                         {
                             list_courses->set_score(grade);
                             save_students(all_student);
-                            cout << MAGENTA << "✨ Grading completed successfully ✨" << RESET << endl;
+                            cout << MAGENTA << "*** Grading completed successfully ***" << RESET << endl;
                             return;
                         }
                         list_courses = list_courses->get_next_cours();
@@ -360,7 +363,7 @@ void Professor::score_student(Student *all_student)
     }
 }
 
-void Professor::Add_notification(Professor *headprof, Cours *headcours)
+void Professor::Add_notification(Professor *&headprof, Cours *&headcours)
 {
     Cours *cours = teachingCourse;
     if (cours == nullptr)
@@ -389,7 +392,7 @@ void Professor::Add_notification(Professor *headprof, Cours *headcours)
             cours->add_Notice(notice);
             save_courses(headcours);
             save_professors(headprof);
-            cout << MAGENTA << "✨ Announcement added successfully ✨" << RESET << endl;
+            cout << MAGENTA << "*** Announcement added successfully ***" << RESET << endl;
             return;
         }
         cours = cours->get_next_cours();
@@ -406,15 +409,15 @@ void Professor::set_teachingCourse(Cours *courses)
     teachingCourse = courses;
 }
 
-void Professor::professor_page(Cours *courses, Student *all_student, Professor *headProfessor)
+void Professor::professor_page(Cours *&courses, Student *&all_student, Professor *&headProfessor)
 {
     Student *students = all_student;
-    cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
-    cout << endl;
+    Professor *prof = headProfessor;
+    cout << MAGENTA << "*** Welcome to your page ***" << RESET << endl;
     while (1)
     {
         cout << GREEN << "Please select one of the items." << endl;
-        cout << "1)Create a new course\t2)Showing the students of a course\n3)Create a new task for course\t4)Grading tasks\n5)Grading students\t6)Add notification\n7)View the course you teach\t0)end" << RESET << endl;
+        cout << "1)Create a new course\n2)Showing the students of a course\n3)Create a new task for course\n4)Grading tasks\n5)Grading students\n6)Add notification\n7)View the course you teach\n0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
@@ -424,23 +427,36 @@ void Professor::professor_page(Cours *courses, Student *all_student, Professor *
             return;
         case 1:
         {
-            cout << "Please enter the name of course: " << endl;
+            cout << "Please enter your ID: " << endl;
+            int ID;
             string name, profname, profamily, college, day, time;
-            cin >> name;
-            profname = this->Firstname;
-            profamily = this->Lastname;
+            cin.ignore();
+            cin >> ID;
+            while (prof != nullptr)
+            {
+                if (ID == prof->get_id())
+                {
+                    profname = prof->Firstname;
+                    profamily = prof->Lastname;
+                    break;
+                }
+                prof=prof->get_nextP();
+            }
+            cin.ignore();
+            cout << "Please enter the name of course: " << endl;
+            getline(cin, name);
             cout << "Please enter the relevant College: " << endl;
-            cin >> college;
+            getline(cin, college);
             cout << "Please enter the class day(For example:Saturday-Monday): " << endl;
-            cin >> day;
+            getline(cin, day);
             cout << "Please enter the class time(For example:15:00-17:00): " << endl;
-            cin >> time;
+            getline(cin, time);
             int units, capacity;
             cout << "Please enter the number of course units: " << endl;
             cin >> units;
             cout << "Please specify the course capacity: " << endl;
             cin >> capacity;
-            this->create_cours(courses, headProfessor, students, name, profname, profamily, college, units, capacity, day, time);
+            prof->create_cours(courses, headProfessor, students, name, profname, profamily, college, units, capacity, day, time);
             break;
         }
         case 2:

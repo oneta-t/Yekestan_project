@@ -140,7 +140,7 @@ void Cours::set_next_cours(Cours *newcours)
     nextcours = newcours;
 }
 
-void Cours::Calculate_average(Student *allSTD)
+void Cours::Calculate_average(Student *&allSTD)
 {
     float sum;
     float count = 0;
@@ -238,4 +238,25 @@ void Cours::Addstudent(int Id)
 void Cours::set_StudentIds(const vector<int> &newstd)
 {
     studentIds = newstd;
+}
+
+Cours::Cours(const Cours &other)
+{
+    this->ID = other.ID;
+    this->Coursename = other.Coursename;
+    this->College=other.College;
+    this->Units=other.Units;
+    this->Capacity=other.Capacity;
+    this->registeredS=other.registeredS;
+    this->Score=other.Score;
+    this->Average_Scores=other.Average_Scores;
+    this->studentRatings=other.studentRatings;
+    this->Day=other.Day;
+    this->Time=other.Time;
+    this->notices=other.notices;
+    this->studentIds=other.studentIds;
+    this->professorname = other.professorname;
+    this->professorfamaiy = other.professorfamaiy;
+    this->tasks=nullptr;
+    this->nextcours = nullptr;
 }

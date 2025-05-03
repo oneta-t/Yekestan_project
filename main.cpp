@@ -38,13 +38,13 @@ int main()
     Professor *professors = load_professors(students);
     Cours *courses = load_courses(students);
 
-    if (courses != nullptr && students != nullptr && professors != nullptr)
-    {
-        cerr << RED << "Error: Failed to load data!" << RESET << endl;
-        return 0;
-    }
+    // if (courses != nullptr || students != nullptr || professors != nullptr)
+    // {
+    //     cerr << RED << "Error: Failed to load data!" << RESET << endl;
+    //     return 0;
+    // }
     cout << endl;
-    cout << MAGENTA << "✨ Welcome to the Yekestan program ✨" << RESET << endl;
+    cout << MAGENTA << "*** Welcome to the Yekestan program ***" << RESET << endl;
     cout << endl;
     while (1)
     {
@@ -53,8 +53,8 @@ int main()
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
-        Student *student = nullptr;
-        Professor *prof = nullptr;
+        // Student *student = nullptr;
+        // Professor *prof = nullptr;
         switch (num)
         {
         case 1:
@@ -73,22 +73,43 @@ int main()
         }
         break;
         case 24:
-            prof->Sign_in_P(professors, courses, students);
+        {
+            Professor prof("", "", "", "", 0);
+            prof.Sign_in_P(professors, courses, students);
             break;
+        }
         case 25:
-            prof->Sign_up_P(professors);
+        {
+            Professor prof("", "", "", "", 0);
+            prof.Sign_up_P(professors);
             break;
+        }
         case 34:
-            student->Sign_in_S(students, courses);
+        {
+            Student student("", "", "", "", "", 0);
+            student.Sign_in_S(students, courses);
             break;
+        }
         case 35:
-            student->Sign_up_S(students);
+        {
+            Student student("", "", "", "", "", 0);
+            student.Sign_up_S(students);
             break;
+        }
         default:
+        {
             cerr << RED << "The number entered is incorrectPlease try again." << RESET << endl;
+            cin.clear();
             break;
+        }
         case 0:
+        {
+            save_students(students);
+            save_professors(professors);
+            save_courses(courses);
+            cleanUp(students, professors, courses);
             return 0;
+        }
         }
     }
     save_students(students);

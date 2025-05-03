@@ -57,10 +57,11 @@ public:
     Task *get_Tasks();
     Cours *get_next_cours();
     void set_next_cours(Cours *newcours);
-    void Calculate_average(Student *allSTD);
+    void Calculate_average(Student *&allSTD);
     void set_std_give_scour(int studentId, float rating);
     void add_Student_rating(int studentId, float rating);
     float get_student_rating(int studentId) const;
     const map<int, float> &getAllRatings() const;
     void set_StudentIds(const vector<int> &newstd);
+    Cours(const Cours &other);
 };

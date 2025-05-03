@@ -8,13 +8,13 @@ void Admin::view_all_students(Student *headStudent)
         cerr << RED << "The student list is empty." << RESET << endl;
         return;
     }
-    cout << "\033[1;32m" << "List of student this semester :" << RESET << endl;
+    cout << "\033[1;34m" << "List of student this semester :" << RESET << endl;
     cout << endl;
     while (STD != nullptr)
     {
         if (STD->get_isActiveS() == true)
         {
-            cout << GREEN << STD->get_firstname() << " " << STD->get_lastname() << "         Student ID: " << STD->get_id() << "        Major: " << STD->get_major() << RESET << endl;
+            cout << BLUE << STD->get_firstname() << " " << STD->get_lastname() << "         Student ID: " << STD->get_id() << "        Major: " << STD->get_major() << RESET << endl;
             cout << endl;
         }
         STD = STD->get_nextS();
@@ -29,13 +29,13 @@ void Admin::view_all_professors(Professor *headProfessor)
         cerr << RED << "The professor list is empty." << RESET << endl;
         return;
     }
-    cout << "\033[1;32m" << "List of professor this semester :" << RESET << endl;
+    cout << "\033[1;34m" << "List of professor this semester :" << RESET << endl;
     cout << endl;
     while (prof != nullptr)
     {
         if (prof->get_isActiveP() == true)
         {
-            cout << GREEN << prof->get_firstname() << " " << prof->get_lastname() << "         professor ID: " << prof->get_id() << RESET << endl;
+            cout << BLUE << prof->get_firstname() << " " << prof->get_lastname() << "         professor ID: " << prof->get_id() << RESET << endl;
             cout << endl;
         }
         prof = prof->get_nextP();
@@ -50,11 +50,11 @@ void Admin::view_all_courses(Cours *headCourse, Student *allSTD)
         cerr << RED << "The courses list is empty." << RESET << endl;
         return;
     }
-    cout << "\033[1;32m" << "List of courses this semester :" << RESET << endl;
+    cout << "\033[1;34m" << "List of courses this semester :" << RESET << endl;
     cout << endl;
     while (courses != nullptr)
     {
-        cout << GREEN << "Cours name: " << courses->get_Coursename() << "       Units: " << courses->get_units() << "        College: " << courses->get_College() << endl;
+        cout << BLUE << "Cours name: " << courses->get_Coursename() << "       Units: " << courses->get_units() << "        College: " << courses->get_College() << endl;
         cout << "Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "        Time: " << courses->get_day() << "-->" << courses->get_time() << endl;
         courses->Calculate_average(allSTD);
         cout << "Average score of students: " << courses->get_average_Scores() << RESET << endl;
@@ -94,7 +94,7 @@ void Admin::view_all_courses(Cours *headCourse, Student *allSTD)
             }
             break;
             case 0:
-                break;
+                return;
             default:
                 cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;
                 break;
@@ -151,7 +151,7 @@ void Admin::create_student(Student *&headStudent)
     Student *newStudent = new Student(username, pass, name, family, major, Id);
     newStudent->set_nextS(headStudent);
     headStudent = newStudent;
-    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+    cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
 void Admin::create_professor(Professor *&headProfessor)
@@ -184,7 +184,7 @@ void Admin::create_professor(Professor *&headProfessor)
     Professor *newprof = new Professor(username, pass, name, family, Id);
     newprof->set_nextP(headProfessor);
     headProfessor = newprof;
-    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+    cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
 void Admin::delete_student(Student *headStudent)
@@ -203,7 +203,7 @@ void Admin::delete_student(Student *headStudent)
         if (id == current->get_id())
         {
             current->set_isActiveS(false);
-            cout << MAGENTA << "✨ Student successfully deleted ✨" << RESET << endl;
+            cout << MAGENTA << "*** Student successfully deleted ***" << RESET << endl;
             return;
         }
         current = current->get_nextS();
@@ -227,7 +227,7 @@ void Admin::delete_professor(Professor *headProfessor)
         if (id == current->get_id())
         {
             current->set_isActiveP(false);
-            cout << MAGENTA << "✨ professor successfully deleted ✨" << RESET << endl;
+            cout << MAGENTA << "*** professor successfully deleted ***" << RESET << endl;
             return;
         }
         current = current->get_nextP();
@@ -251,7 +251,7 @@ void Admin::restore_student(Student *headStudent)
         if (id == current->get_id())
         {
             current->set_isActiveS(true);
-            cout << MAGENTA << "✨ Student successfully restore ✨" << RESET << endl;
+            cout << MAGENTA << "*** Student successfully restore ***" << RESET << endl;
             return;
         }
         current = current->get_nextS();
@@ -275,7 +275,7 @@ void Admin::restore_professor(Professor *headProfessor)
         if (id == current->get_id())
         {
             current->set_isActiveP(false);
-            cout << MAGENTA << "✨ professor successfully restore ✨" << RESET << endl;
+            cout << MAGENTA << "*** professor successfully restore ***" << RESET << endl;
             return;
         }
         current = current->get_nextP();
@@ -285,46 +285,47 @@ void Admin::restore_professor(Professor *headProfessor)
 
 void Admin_page(Cours *headcourse, Student *headstd, Professor *headprof)
 {
-    cout << MAGENTA << "✨ Welcome to the admin page ✨" << RESET << endl;
+    cout << MAGENTA << "*** Welcome to the admin page ***" << RESET << endl;
     cout << endl;
     while (1)
     {
         cout << GREEN << "Please select one of the items." << endl;
-        cout << "1)view students\t2)view professors\t3)view courses\n4)create student\t5)create professor\n6)delete student\t7)delete professor\n8)restore student\t9)restore professsor\t0)end" << RESET << endl;
+        cout << "1)view students\n2)view professors\n3)view courses\n4)create student\n5)create professor\n6)delete student\n7)delete professor\n8)restore student\n9)restore professsor\n0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
-        Admin *admin=nullptr;
+        //Admin *admin = nullptr;
+        Admin admin;
         switch (num)
         {
         case 0:
             return;
         case 1:
-            admin->view_all_students(headstd);
+            admin.view_all_students(headstd);
             break;
         case 2:
-            admin->view_all_professors(headprof);
+            admin.view_all_professors(headprof);
             break;
         case 3:
-            admin->view_all_courses(headcourse, headstd);
+            admin.view_all_courses(headcourse, headstd);
             break;
         case 4:
-            admin->create_student(headstd);
+            admin.create_student(headstd);
             break;
         case 5:
-            admin->create_professor(headprof);
+            admin.create_professor(headprof);
             break;
         case 6:
-            admin->delete_student(headstd);
+            admin.delete_student(headstd);
             break;
         case 7:
-            admin->delete_professor(headprof);
+            admin.delete_professor(headprof);
             break;
         case 8:
-            admin->restore_student(headstd);
+            admin.restore_student(headstd);
             break;
         case 9:
-            admin->restore_professor(headprof);
+            admin.restore_professor(headprof);
             break;
         default:
             cerr << RED << "The number entered is incorrect. Please try again." << RESET << endl;

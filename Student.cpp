@@ -14,10 +14,10 @@ Student::Student(string uname, string pwd, string name, string family, string ma
 
 Student::~Student()
 {
-    Cours* tempCours = list_courses;
+    Cours *tempCours = list_courses;
     while (tempCours != nullptr)
     {
-        Cours* nextCours = tempCours->get_next_cours();
+        Cours *nextCours = tempCours->get_next_cours();
         delete tempCours;
         tempCours = nextCours;
     }
@@ -74,14 +74,13 @@ void Student::set_nextS(Student *nextS)
     next_S = nextS;
 }
 
-void Student::student_page(Cours *courses,Student*headStudent)
+void Student::student_page(Cours *&courses, Student *&headStudent)
 {
-    cout << MAGENTA << "✨ Welcome to your page ✨" << RESET << endl;
-    cout << endl;
+    cout << MAGENTA << "*** Welcome to your page ***" << RESET << endl;
     while (1)
     {
         cout << GREEN << "Please select one of the items." << endl;
-        cout << "1)View registered courses this semester        2)View available courses this semester\n3)Register for the desired course        4)View task scores\n5)Answerthe tasks        6)Grad to course\n7)view notice of course        0)end" << RESET << endl;
+        cout << "1)View registered courses this semester\n2)View available courses this semester\n3)Register for the desired course\n4)View task scores\n5)Answerthe tasks\n6)Grad to course\n7)view notice of course\n0)end" << RESET << endl;
         cout << "Please enter the desired number: " << endl;
         int num;
         cin >> num;
@@ -96,7 +95,7 @@ void Student::student_page(Cours *courses,Student*headStudent)
             this->view_Available_Courses(courses);
             break;
         case 3:
-            this->Course_registration(courses,headStudent);
+            this->Course_registration(courses, headStudent);
             break;
         case 4:
             this->view_Task_Grades();
@@ -117,7 +116,7 @@ void Student::student_page(Cours *courses,Student*headStudent)
     }
 }
 
-void Student::Sign_in_S(Student *&headStudent, Cours *courses)
+void Student::Sign_in_S(Student *&headStudent, Cours *&courses)
 {
     string username, password;
     cout << YELLOW << "Pleas enter your username:" << RESET << endl;
@@ -130,8 +129,9 @@ void Student::Sign_in_S(Student *&headStudent, Cours *courses)
     {
         if (temp->get_username() == username && temp->get_password() == password)
         {
-            cout << MAGENTA << "✨ Login was successful ✨" << RESET << endl;
-            this->student_page(courses,headStudent);
+            cout << endl;
+            cout << MAGENTA << "*** Login was successful ***" << RESET << endl;
+            this->student_page(courses, headStudent);
             return;
         }
         temp = temp->get_nextS();
@@ -177,7 +177,7 @@ void Student::Sign_up_S(Student *&headStudent)
     Student *newstudent = new Student(username, password1, firstname, lastname, major, id);
     Add_student(headStudent, newstudent);
     save_students(headStudent);
-    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+    cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
 void Student::Add_student(Student *&headStudent, Student *newstudent)
@@ -197,7 +197,7 @@ void Student::View_registered_courses()
     cout << "\033[1;32m" << "List of courses you have taken this semester :" << RESET << endl;
     while (courses != nullptr)
     {
-        cout << GREEN << "Id: " << courses->get_id() << "      Name: " << courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
+        cout << CYAN << "Id: " << courses->get_id() << "      Name: " << courses->get_Coursename() << "       College: " << courses->get_College() << "       Time: " << courses->get_day() << "-->" << courses->get_time();
         cout << endl;
         cout << "       Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "        Average_Scores: " << courses->get_average_Scores() << "        Score: " << courses->get_score();
         cout << endl;
@@ -207,7 +207,7 @@ void Student::View_registered_courses()
     cout << endl;
 }
 
-void Student::view_Available_Courses(Cours *allcourses) 
+void Student::view_Available_Courses(Cours *allcourses)
 {
     string currentCollege = "";
     Cours *current = allcourses;
@@ -216,6 +216,7 @@ void Student::view_Available_Courses(Cours *allcourses)
         cerr << RED << "There are no courses offered this semester." << RESET << endl;
         return;
     }
+    cout << endl;
     cout << "\033[1;32m" << "List of courses offered this semester :" << RESET << endl;
     cout << endl;
     while (current != nullptr)
@@ -234,12 +235,13 @@ void Student::view_Available_Courses(Cours *allcourses)
         if (collegeExists == true)
         {
             cout << GREEN << "     ==== College " << current->get_College() << " ====     " << RESET << endl;
+            cout << endl;
             Cours *courses = allcourses;
             while (courses != nullptr)
             {
                 if (courses->get_College() == current->get_College())
                 {
-                    cout << GREEN << "Id: " << courses->get_id() << "      Name: " << courses->get_Coursename() << "       Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "       Time: " << courses->get_day() << "-->" << courses->get_time() << "\n";
+                    cout << CYAN << "Id: " << courses->get_id() << "      Name: " << courses->get_Coursename() << "       Professor: " << courses->get_Professorname() << " " << courses->get_Professorfamaly() << "       Time: " << courses->get_day() << "-->" << courses->get_time() << "\n";
                     cout << "Units: " << courses->get_units() << "         Number of people registered: ( " << courses->get_registeredS() << "/" << courses->get_capacity() << " )" << RESET << endl;
                     cout << YELLOW << "*_______*       *_______*       *_______*       *_______*       *_______*" << RESET << endl;
                     cout << endl;
@@ -251,7 +253,7 @@ void Student::view_Available_Courses(Cours *allcourses)
     }
 }
 
-void Student::Course_registration(Cours *allcourses,Student*headStudent)
+void Student::Course_registration(Cours *&allcourses, Student *&headStudent)
 {
     cout << "Please enter the course ID you want to add to your course list: " << endl;
     int num;
@@ -292,11 +294,15 @@ void Student::Course_registration(Cours *allcourses,Student*headStudent)
         }
         registeredC = registeredC->get_next_cours();
     }
-    targetCourse->Addstudent(this->get_id());
-    targetCourse->set_next_cours(list_courses);
-    list_courses = targetCourse;
+    Cours *newCourse = new Cours(*targetCourse);
+    newCourse->set_next_cours(list_courses);
+    list_courses = newCourse;
+    // targetCourse->Addstudent(this->get_id());
+    // targetCourse->set_next_cours(list_courses);
+    // list_courses = targetCourse;
     save_students(headStudent);
-    cout << MAGENTA << "✨ Registration was successful ✨" << RESET << endl;
+    save_courses(allcourses);
+    cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
 void Student::view_Task_Grades()
@@ -340,7 +346,7 @@ void Student::view_Task_Grades()
     }
 }
 
-void Student::Answer_to_task(Student*headStudent)
+void Student::Answer_to_task(Student *&headStudent)
 {
     cout << "Please enter the course ID you want to add submission: " << endl;
     int num;
@@ -384,7 +390,7 @@ void Student::Answer_to_task(Student*headStudent)
                     getline(cin, answer);
                     tasks->Add_Submissions(this->Firstname, this->Id, answer);
                     save_students(headStudent);
-                    cout << MAGENTA << "✨ Your answer was successfully added ✨" << RESET << endl;
+                    cout << MAGENTA << "*** Your answer was successfully added ***" << RESET << endl;
                     return;
                 }
                 tasks = tasks->get_next_task();
@@ -398,7 +404,7 @@ void Student::Answer_to_task(Student*headStudent)
     return;
 }
 
-void Student::Grading_course(Student*headStudent)
+void Student::Grading_course(Student *&headStudent)
 {
     cout << "Please enter the course ID you want to add grad for course: " << endl;
     int num;
@@ -421,9 +427,9 @@ void Student::Grading_course(Student*headStudent)
                 cerr << RED << "The score you entered is not in the range of 0-20. Please try again:" << RESET << endl;
                 cin >> grad;
             }
-            courses->add_Student_rating(Id,grad);
+            courses->add_Student_rating(Id, grad);
             save_students(headStudent);
-            cout << MAGENTA << "✨ Your grad was successfully added to this course ✨" << RESET << endl;
+            cout << MAGENTA << "*** Your grad was successfully added to this course ***" << RESET << endl;
             return;
         }
         courses = courses->get_next_cours();
@@ -446,13 +452,13 @@ void Student::view_notice()
     {
         if (courses->get_id() == num)
         {
-            vector<string>allnotice=courses->get_Notice();
-            cout <<"\033[1:34m"<< "Course announcements: " <<RESET<< endl;
+            vector<string> allnotice = courses->get_Notice();
+            cout << "\033[1:34m" << "Course announcements: " << RESET << endl;
             for (size_t i = 0; i < allnotice.size(); ++i)
             {
-                cout <<BLUE<< i + 1 << ")" << allnotice[i] << endl;
-                cout<<endl;
-                cout<< "-------------------" <<RESET<< endl;
+                cout << BLUE << i + 1 << ")" << allnotice[i] << endl;
+                cout << endl;
+                cout << "-------------------" << RESET << endl;
             }
         }
         courses = courses->get_next_cours();
