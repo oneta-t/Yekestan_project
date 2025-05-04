@@ -25,27 +25,27 @@ Student::~Student()
     list_courses = nullptr;
 }
 
-string Student::get_firstname()
+const string Student::get_firstname()const 
 {
     return Firstname;
 }
 
-string Student::get_lastname()
+const string Student::get_lastname()const
 {
     return Lastname;
 }
 
-string Student::get_major()
+const string Student::get_major()const
 {
     return Major;
 }
 
-int Student::get_id()
+int Student::get_id()const
 {
     return Id;
 }
 
-bool Student::get_isActiveS()
+bool Student::get_isActiveS()const
 {
     return isActiveS;
 }

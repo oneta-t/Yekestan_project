@@ -21,11 +21,11 @@ private:
 public:
     Student(string uname, string pwd, string name, string family, string major, int id);
     ~Student();
-    string get_firstname();
-    string get_lastname();
-    string get_major();
-    int get_id();
-    bool get_isActiveS();
+    const string get_firstname()const;
+    const string get_lastname()const;
+    const string get_major()const;
+    int get_id()const;
+    bool get_isActiveS()const;
     void set_isActiveS(bool x);
     Cours* get_list_courses();
     void set_list_courses(Cours*courses);

@@ -22,7 +22,7 @@ private:
     int registeredS;
     float Score;
     float Average_Scores;
-    std::map<int, float> studentRatings;
+    map<int, float> studentRatings;
     string Day;
     string Time;
     vector<string> notices;

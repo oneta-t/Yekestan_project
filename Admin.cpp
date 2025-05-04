@@ -151,6 +151,7 @@ void Admin::create_student(Student *&headStudent)
     Student *newStudent = new Student(username, pass, name, family, major, Id);
     newStudent->set_nextS(headStudent);
     headStudent = newStudent;
+    save_students(headStudent);
     cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
@@ -184,10 +185,11 @@ void Admin::create_professor(Professor *&headProfessor)
     Professor *newprof = new Professor(username, pass, name, family, Id);
     newprof->set_nextP(headProfessor);
     headProfessor = newprof;
+    save_professors(headProfessor);
     cout << MAGENTA << "*** Registration was successful ***" << RESET << endl;
 }
 
-void Admin::delete_student(Student *headStudent)
+void Admin::delete_student(Student *&headStudent)
 {
     cout << "Please enter the student ID of the student you want to delete: " << endl;
     int id;
@@ -203,6 +205,7 @@ void Admin::delete_student(Student *headStudent)
         if (id == current->get_id())
         {
             current->set_isActiveS(false);
+            save_students(headStudent);
             cout << MAGENTA << "*** Student successfully deleted ***" << RESET << endl;
             return;
         }
@@ -211,9 +214,9 @@ void Admin::delete_student(Student *headStudent)
     cerr << RED << "There is no student with this ID in the student list." << RESET << endl;
 }
 
-void Admin::delete_professor(Professor *headProfessor)
+void Admin::delete_professor(Professor *&headProfessor)
 {
-    cout << "Please enter the student ID of the professor you want to delete: " << endl;
+    cout << "Please enter the professor ID of the professor you want to delete: " << endl;
     int id;
     cin >> id;
     Professor *current = headProfessor;
@@ -227,6 +230,7 @@ void Admin::delete_professor(Professor *headProfessor)
         if (id == current->get_id())
         {
             current->set_isActiveP(false);
+            save_professors(headProfessor);
             cout << MAGENTA << "*** professor successfully deleted ***" << RESET << endl;
             return;
         }
@@ -235,7 +239,7 @@ void Admin::delete_professor(Professor *headProfessor)
     cerr << RED << "There is no professor with this ID in the professor list." << RESET << endl;
 }
 
-void Admin::restore_student(Student *headStudent)
+void Admin::restore_student(Student *&headStudent)
 {
     cout << "Please enter the student ID of the student you want to restore: " << endl;
     int id;
@@ -251,6 +255,7 @@ void Admin::restore_student(Student *headStudent)
         if (id == current->get_id())
         {
             current->set_isActiveS(true);
+            save_students(headStudent);
             cout << MAGENTA << "*** Student successfully restore ***" << RESET << endl;
             return;
         }
@@ -259,9 +264,9 @@ void Admin::restore_student(Student *headStudent)
     cerr << RED << "There is no student with this ID in the student list." << RESET << endl;
 }
 
-void Admin::restore_professor(Professor *headProfessor)
+void Admin::restore_professor(Professor *&headProfessor)
 {
-    cout << "Please enter the student ID of the professor you want to restore: " << endl;
+    cout << "Please enter the professor ID of the professor you want to restore: " << endl;
     int id;
     cin >> id;
     Professor *current = headProfessor;
@@ -274,7 +279,8 @@ void Admin::restore_professor(Professor *headProfessor)
     {
         if (id == current->get_id())
         {
-            current->set_isActiveP(false);
+            current->set_isActiveP(true);
+            save_professors(headProfessor);
             cout << MAGENTA << "*** professor successfully restore ***" << RESET << endl;
             return;
         }

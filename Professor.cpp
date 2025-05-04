@@ -138,11 +138,11 @@ void Professor::create_cours(Cours *&headCourses, Professor *&headProfessor, Stu
 
 void Professor::display_students(Cours *cours, Student *allStd)
 {
-    if (cours->get_Professorname() != Firstname || cours->get_Professorfamaly() != Lastname)
-    {
-        cerr << RED << "This cours does not belong to you" << RESET << endl;
-        return;
-    }
+    // if (cours->get_Professorname() != Firstname || cours->get_Professorfamaly() != Lastname)
+    // {
+    //     cerr << RED << "This cours does not belong to you" << RESET << endl;
+    //     return;
+    // }
     vector<int> StdID = cours->get_stdID();
     if (StdID.empty())
     {
@@ -440,7 +440,7 @@ void Professor::professor_page(Cours *&courses, Student *&all_student, Professor
                     profamily = prof->Lastname;
                     break;
                 }
-                prof=prof->get_nextP();
+                prof = prof->get_nextP();
             }
             cin.ignore();
             cout << "Please enter the name of course: " << endl;
@@ -475,7 +475,7 @@ void Professor::professor_page(Cours *&courses, Student *&all_student, Professor
                 if (current->get_id() == num1)
                 {
                     this->display_students(current, students);
-                    break;
+                    return;
                 }
                 current = current->get_next_cours();
             }
@@ -484,7 +484,7 @@ void Professor::professor_page(Cours *&courses, Student *&all_student, Professor
         break;
         case 3:
         {
-            cout << "Please enter the course ID for which you want to see the students: " << endl;
+            cout << "Please enter the course ID for which you want to add task: " << endl;
             int num2;
             cin >> num2;
             Cours *current = courses;
@@ -497,14 +497,15 @@ void Professor::professor_page(Cours *&courses, Student *&all_student, Professor
             {
                 if (current->get_id() == num2)
                 {
-                    cout << "Please enter the task name: " << endl;
                     string nametaske, description, deadline;
+                    cout << "Please enter the task name: " << endl;
+                    cin.ignore();
                     getline(cin, nametaske);
                     cout << "Please enter the description: " << endl;
                     getline(cin, description);
                     cout << "Please specify the deadline: " << endl;
                     getline(cin, deadline);
-                    this->create_task(courses, current, nametaske, description, deadline);
+                    prof->create_task(courses, current, nametaske, description, deadline);
                     break;
                 }
                 current = current->get_next_cours();
@@ -513,16 +514,16 @@ void Professor::professor_page(Cours *&courses, Student *&all_student, Professor
         }
         break;
         case 4:
-            this->score_task(students);
+            prof->score_task(students);
             break;
         case 5:
-            this->score_student(students);
+            prof->score_student(students);
             break;
         case 6:
-            this->Add_notification(headProfessor, courses);
+            prof->Add_notification(headProfessor, courses);
             break;
         case 7:
-            this->view_courses();
+            prof->view_courses();
             break;
         default:
             break;
